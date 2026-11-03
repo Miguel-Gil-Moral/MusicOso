@@ -1,0 +1,5 @@
+export const estado = {
+    vidas: 3,
+    playerX: 2,
+    playerY: 2,
+};
