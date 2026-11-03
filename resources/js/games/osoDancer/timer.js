@@ -1,0 +1,42 @@
+import { perderVida } from "./vidas.js";
+
+const duracion = 1000;
+const margen = 100;
+let inicio = performance.now();
+
+export function reiniciarAnimacion() {
+    let acierto = true;
+    const tiempo = performance.now() - inicio;
+
+    let porcentajeAcierto = Math.max(0,100 - (Math.abs(tiempo - duracion) / margen) * 100);
+
+    document.documentElement.style.setProperty("--duracion", duracion + "ms");
+    const mensaje = document.getElementById("mensaje");
+
+    if (porcentajeAcierto >= 95) {
+        mensaje.textContent = "PERFECTO";
+    } else if (porcentajeAcierto >= 80) {
+        mensaje.textContent = "BIEN";
+    } else if (porcentajeAcierto >= 50) {
+        mensaje.textContent = "OK";
+    } else if (porcentajeAcierto < 50 && porcentajeAcierto > 0) {
+        mensaje.textContent = "A PENAS";
+    } else {
+        mensaje.textContent = "FALLO";
+        acierto = false;
+        perderVida();
+    }
+
+    console.log(mensaje.textContent + " | " + porcentajeAcierto.toFixed(2) + "%" + " | " + tiempo.toFixed(2) + "ms");
+
+    const izquierda = document.querySelector(".izquierda");
+    const derecha = document.querySelector(".derecha");
+    izquierda.style.animation = "none";
+    derecha.style.animation = "none";
+    izquierda.offsetWidth;
+    izquierda.style.animation = "";
+    derecha.style.animation = "";
+
+    inicio = performance.now();
+    return acierto;
+}
