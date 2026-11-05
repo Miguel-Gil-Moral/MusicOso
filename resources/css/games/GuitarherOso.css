@@ -1,0 +1,157 @@
+div {
+    width: 100px;
+    height: 100px;
+}
+
+body {
+    margin: 0;
+}
+
+#Pantalla_principal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+#Pantalla_principal > h1,
+#Pantalla_principal > p {
+    position: relative;
+    top: -25px;
+}
+
+.Gameplay-container {
+    display: flex;
+    width: auto;
+    height: auto;
+}
+/*
+.Gameplay {
+    border: 2vh solid black;
+}
+*/
+#Pentagrama {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50vh;
+    width: 50vw;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+#Controles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1vh solid black;
+    height: 50vh;
+    width: 7vw;
+    box-sizing: border-box;
+}
+
+.nota{
+    flex: 1;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.figura-musical {
+    position: absolute;
+    left: calc(100% - 70px);
+    width: 70px;
+    height: 90px;
+    object-fit: contain;
+    z-index: 2;
+    animation: mover-nota 2s linear forwards;
+}
+
+@keyframes mover-nota {
+    from {
+        left: calc(100% - 70px);
+    }
+    to {
+        left: -35px;
+    }
+}
+
+.figura-G {
+    top: calc(7.14% - 76px);
+}
+
+.figura-F {
+    top: calc(21.43% - 76px);
+}
+
+.figura-E {
+    top: calc(35.71% - 76px);
+}
+
+.figura-D {
+    top: calc(50% - 76px);
+}
+
+.figura-C {
+    top: calc(64.29% - 76px);
+}
+
+.figura-B {
+    top: calc(78.57% - 76px);
+}
+
+.figura-A {
+    top: calc(92.86% - 76px);
+}
+
+.control {
+    border: 3px solid black;
+    transition: background-color 0.18s ease;
+}
+
+#Controles .control {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+.control-actiu {
+    background-color: lightgreen;
+}
+
+.linea-horizontal {
+  width: 100%;
+  height: 0.5vh;
+  background-color: black;
+}
+/*
+#G {
+    background-color: yellow;
+}
+#F {
+    background-color: blue;
+}
+#E {
+    background-color: yellow;
+}
+#D {
+    background-color: blue;
+}
+#C {
+    background-color: yellow;
+}
+#B {
+    background-color: blue;
+}
+#A {
+    background-color: yellow;
+}*/
