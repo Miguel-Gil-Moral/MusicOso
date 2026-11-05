@@ -1,4 +1,3 @@
-
 @extends('games.main')
 
 @section('title', 'Mapa')
@@ -12,9 +11,9 @@
     </div>
 
 </body>
-<script src=""></script>
+<script src="script.js"></script>
 @endsection
 
-@push('srcipts')
-    @vite(['resources/css/games/'GeOsometry\ Dash.css, 'resources/js/'GeOsometry\ Dash/script.js])
+@push('scripts')
+    @vite(['resources/css/games/GeOsometryDash.css', 'resources/js/GeOsometryDash/script.js'])
 @endpush
