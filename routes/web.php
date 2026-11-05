@@ -8,3 +8,4 @@ Route::get('/', function () {
 
 Route::view('/games/osoDancer', 'games.osoDancer')->name('games.osoDancer');
 Route::view('/games/GuitarherOso', 'games.GuitarherOso')->name('games.GuitarherOso');
+Route::view('/games/GeOsometryDash', 'games.GeOsometryDash')->name('games.GeOsometryDash');
