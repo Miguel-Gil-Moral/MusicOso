@@ -5,9 +5,8 @@ const margen = 100;
 let inicio = performance.now();
 
 export function reiniciarAnimacion() {
-    let acierto = true;
     const tiempo = performance.now() - inicio;
-
+    
     let porcentajeAcierto = Math.max(0,100 - (Math.abs(tiempo - duracion) / margen) * 100);
 
     document.documentElement.style.setProperty("--duracion", duracion + "ms");
@@ -23,7 +22,6 @@ export function reiniciarAnimacion() {
         mensaje.textContent = "A PENAS";
     } else {
         mensaje.textContent = "FALLO";
-        acierto = false;
         perderVida();
     }
 
@@ -38,5 +36,5 @@ export function reiniciarAnimacion() {
     derecha.style.animation = "";
 
     inicio = performance.now();
-    return acierto;
+    return porcentajeAcierto;
 }
