@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var salto, enAire = false, limiteSaltoLlegado;
     var pantallaActual = 'Menu';
     var moverFondo, moverSuelo, moverBloque, moverZarza;
-    var posicionFondo = 0, posicionSuelo = 0, posicionPersonaje = 5.0, posicionBloque = 100, posicionZarza = 95;
+    var posicionFondo = 0, posicionSuelo = 0, posicionPersonaje = 5.0, posicionBloque = 150, posicionZarza = 95;
     var pause = false;
 
     function establecerMenu() {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function comenzarJuego() {
         posicionFondo = 0.00, posicionSuelo = 0.00;
-        posicionPersonaje = 5.0, posicionBloque = 100, posicionZarzaX = 95;
+        posicionPersonaje = 5.0, posicionBloque = 150, posicionZarza = 96;
 
         clearInterval(salto);
         clearInterval(moverFondo);
@@ -67,12 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
         arrancarJuego();
     }
 
-    function colisiones() {
-        if (personaje.x){
-            console.log('Has creado colision');
-        }
-    }
-
     //Funcionamiento juego
     function arrancarJuego() {
         pantallaActual = 'Juego';
@@ -92,13 +86,20 @@ document.addEventListener('DOMContentLoaded', function() {
             posicionBloque -= 0.2;
 
             bloque.style.left = posicionBloque + 'rem';
+            if(colisionMuerteBloque(personaje, bloque)){
+                enAire = false;
+                comenzarJuego();
+            }
         }, 1);
 
         moverZarza = setInterval(function() {
             posicionZarza -= 0.2;
 
             zarzas.style.left = posicionZarza + 'rem';
-            colisiones();
+            if(colisionesPincho(personaje, zarzas)){
+                enAire = false;
+                comenzarJuego();
+            }
         }, 1);
     }
 
@@ -180,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'r':
                 if (pantallaActual == 'Juego'){
+                    enAire = false;
                     if(pause) {
                         pantallaPausa.setAttribute('hidden', '');
                         pause = false;

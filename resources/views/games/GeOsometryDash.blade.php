@@ -4,16 +4,15 @@
 
 @section('content')
 
-<body>
-    
-    <div id="contenedorJuego">
-        <button id="botonJuego">Jugar</button>
-    </div>
+<div id="contenedorJuego">
+    <button id="botonJuego">Jugar</button>
+</div>
 
-</body>
-<script src="script.js"></script>
 @endsection
 
 @push('scripts')
-    @vite(['resources/css/games/GeOsometryDash.css', 'resources/js/GeOsometryDash/script.js'])
+    @vite([
+        'resources/css/games/GeOsometryDash.css',
+        'resources/js/GeOsometryDash/script.js',
+        'resources/js/GeOsometryDash/colisiones.js'])
 @endpush
