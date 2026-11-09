@@ -1,0 +1,110 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100vh;
+}
+
+#contenedorJuego {
+    position: relative;
+    background-position: center;
+    width: 75vw;
+    height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Esconde todos los elementos que estan fuera del contenedor*/
+}
+
+a {
+    cursor: pointer;
+}
+
+#niveles {
+    width: 75vw;
+}
+
+.nivel {
+    background-color: black;
+    padding: 1rem;
+    border-radius: 8px;
+    color: white;
+}
+
+#botonJuego {
+    background-color: rgb(156, 221, 94);
+    border: none;
+    border-radius: 8px;
+    font-size: 5vh;
+}
+
+#sueloJuego {
+    position: absolute;
+    background-image: url(../imagenes/Suelo.png);
+    background-size: auto 140%;
+    width: 75vw;
+    height: 25vh;
+    background-repeat: repeat-x;
+    bottom: 0;
+}
+
+#personaje {
+    position: absolute;
+    height: 7vh;
+    left: 25rem;
+    bottom: 5rem;
+}
+
+#pantallaPausa {
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 1rem;
+    width: 65vw;
+    height: 65vh;
+}
+
+#encabezadoPausa {
+    color: white;
+    font-size: 7vh;
+    text-align: center;
+}
+
+#pantallaPausa > div > button {
+    width: 10rem;
+    height: 5rem;
+}
+
+#pantallaPausa > div {
+    width: 50vw;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10rem;
+}
+
+.bloque, .zarzas {
+    height: 7vh;
+    width: 3.5vw;
+    position: absolute;
+    left: 100rem;
+    bottom: 5rem;
+}
+
+.espejo {
+    height: 10vh;
+    width: 3.5vw;
+    position: absolute;
+    left: 450rem;
+    bottom: 7rem;
+}
+
+.caja {
+    position: absolute;
+    height: 10vh;
+    width: 5vw;
+    left: 250rem;
+    bottom: 7rem;
+}
