@@ -26,6 +26,8 @@ document.addEventListener("keydown", (event) => {
             return;
     }
 
+    event.preventDefault();
+
     let precision = reiniciarAnimacion();
 
     if (precision === 0) {
@@ -43,9 +45,9 @@ document.addEventListener("keydown", (event) => {
         estado.playerX = 2;
         estado.playerY = 2;
     } else if (cell === 3) {
-            alert("¡Has llegado a la salida!" + "\n Pasos usados: " + pasos + "\n Porcentaje acierto: " + (mediaPrecision/pasos).toFixed(2));
-            pasos = 0;
-            mediaPrecision = 0;        
+        alert("¡Has llegado a la salida!" + "\n Pasos usados: " + pasos + "\n Porcentaje acierto: " + (mediaPrecision / pasos).toFixed(2));
+        pasos = 0;
+        mediaPrecision = 0;
         estado.playerX = 2;
         estado.playerY = 2;
     } else {

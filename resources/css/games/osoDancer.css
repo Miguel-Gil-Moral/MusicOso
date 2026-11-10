@@ -6,24 +6,42 @@
 
 body {
     min-height: 100vh;
+    overflow: hidden;
     display: grid;
     place-items: center;
 }
 
 #game {
+    position: relative;
+    width: min(90vw, 950px);
+    aspect-ratio: 19 / 11;
+    overflow: hidden;
+}
+
+#map {
     display: grid;
-    grid-template-columns: repeat(15, 50px);
+    grid-template-columns: repeat(19, minmax(0, 1fr));
+    grid-template-rows: repeat(11, minmax(0, 1fr));
+    width: 100%;
+    height: 100%;
+    transform: translate(
+        calc(var(--camera-x, 0) * -100% / 19),
+        calc(var(--camera-y, 0) * -100% / 11)
+    );
+    transform-origin: top left;
+    transition: transform 150ms ease-out;
 }
 
 .cell {
-    width: 50px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
     display: grid;
     place-items: center;
 }
 
 .wall {
     background-color: gray;
+    border: 1px solid #555;
 }
 
 .floor {

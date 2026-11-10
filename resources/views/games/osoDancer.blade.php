@@ -6,7 +6,10 @@
 @section('content')
     <header id="header"></header>
     <p id="mensaje"></p>
-    <main id="game"></main>
+
+    <main id="game">
+        <div id="map"></div>
+    </main>
 
     <div class="timer-bar">
         <div class="izquierda"></div>
