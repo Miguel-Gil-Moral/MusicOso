@@ -24,14 +24,14 @@
             <div class="nivel">
                 <h4>Dificultad: Media</h4>
                 <h2>Oso Can't Let Go</h2>
-                <p>Mecánicas: Surf, Espejo, Bola, Lianas</p>
+                <p>Mecánicas: Surf, Espejo, Bola, Bayas</p>
             </div>
         </a>
         <a data-nombre="UltraOso">
             <div class="nivel">
                 <h4>Dificultad: Difícil</h4>
                 <h2>UltraOso</h2>
-                <p>Mecánicas: Surf, Espejo, Bola, Ufo, Lianas, Trampolines</p>
+                <p>Mecánicas: Surf, Espejo, Bola, Ufo, Bayas, Trampolines</p>
             </div>
         </a>
     </div>

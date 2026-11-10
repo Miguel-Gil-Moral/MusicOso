@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const zarzas = document.createElement('img');
     const caja = document.createElement('img');
     const espejo = document.createElement('img');
+    const baya = document.createElement('img');
+    const trampolin = document.createElement('img');
 
     bloque.className = 'bloque';
     bloque.src = '../GeOsometryDash/imagenes/Bloque.png';
@@ -23,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     espejo.src = '../GeOsometryDash/imagenes/Espejo.png';
     caja.className = 'caja';
     caja.src = '../GeOsometryDash/imagenes/Caja.png';
+    baya.className = 'baya';
+    baya.src = '../GeOsometryDash/imagenes/Baya.png';
+    trampolin.className = 'trampolin';
+    trampolin.src = '../GeOsometryDash/imagenes/Trampolin.png';
 
     suelo.id = 'sueloJuego';
     personaje.src = '../GeOsometryDash/imagenes/Oso.jpg';
@@ -32,10 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var salto, caida, personajeChocado, volar, enAire = false, pause, cambioGravedad = false, prohibidoSaltar = false;
     var pantallaActual = 'Menu', modoActual = 'Cubo';
-    var moverFondo, moverSuelo, moverBloque, moverZarza, moverEspejo, moverCaja;
+    var moverFondo, moverSuelo, moverBloque, moverZarza, moverEspejo, moverCaja, moverBaya, moverTrampolin;
     var posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
-    posicionPersonaje = 5, posicionBloque = 150, posicionZarza = 95, posicionEspejo = 450, posicionCaja = 250,
-    limiteCaidaLenta, limiteCaidaMedia, limiteSalto = 15;
+    posicionPersonaje = 5, posicionBloque = 150, posicionZarza = 95, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225,
+    limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
     
     
     function establecerMenu() {
@@ -69,15 +75,21 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     })
 
-    botonMenu.addEventListener('click', function() {
-        pantallaPausa.style.display = 'none';
-        pause = false;
+    function quitarElementos() {
         contenedorJuego.removeChild(suelo);
         contenedorJuego.removeChild(personaje);
         contenedorJuego.removeChild(zarzas);
         contenedorJuego.removeChild(bloque);
         contenedorJuego.removeChild(espejo);
         contenedorJuego.removeChild(caja);
+        contenedorJuego.removeChild(baya);
+        contenedorJuego.removeChild(trampolin);
+    }
+
+    botonMenu.addEventListener('click', function() {
+        pantallaPausa.style.display = 'none';
+        pause = false;
+        quitarElementos();
         pararIntervalos();
         establecerNiveles();
     })
@@ -101,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function comenzarJuego() {
         modoActual = 'Cubo';
         posicionFondo = 0.00, posicionSuelo = 0.00;
-        posicionPersonaje = 5, posicionBloque = 150, posicionZarza = 96, posicionEspejo = 450, posicionCaja = 250;
+        posicionPersonaje = 5, posicionBloque = 150, posicionZarza = 96, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
+        limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
         cambioGravedad = false;
         enAire = false;
         prohibidoSaltar = false;
@@ -111,8 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
         contenedorJuego.appendChild(bloque);
         contenedorJuego.appendChild(zarzas);
         contenedorJuego.appendChild(personaje);
+        contenedorJuego.appendChild(baya);
         contenedorJuego.appendChild(espejo);
         contenedorJuego.appendChild(caja);
+        contenedorJuego.appendChild(trampolin);
         contenedorJuego.appendChild(pantallaPausa);
 
         contenedorJuego.style.backgroundImage = 'url(../GeOsometryDash/imagenes/Fondo_juego.png)';
@@ -133,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
         clearInterval(moverZarza);
         clearInterval(moverEspejo);
         clearInterval(moverCaja);
+        clearInterval(moverBaya);
+        clearInterval(moverTrampolin);
         clearInterval(salto);
         clearInterval(caida);
         clearInterval(volar);
@@ -197,9 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
             posicionCaja -= 0.2;
 
             caja.style.left = posicionCaja + 'rem';
-            if(colision(personaje, caja)) {
-                modoActual = 'Nave';
-            }
+            // if(colision(personaje, caja)) {
+            //     modoActual = 'Nave';
+            // }
         }, 1);
 
         moverEspejo = setInterval(function() {
@@ -207,9 +224,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
             espejo.style.left = posicionEspejo + 'rem';
 
-            if(colision(personaje, espejo)) {
-                cambioGravedad = true;
-                realizarCaida();
+            // if(colision(personaje, espejo)) {
+            //     cambioGravedad = true;
+            //     realizarCaida();
+            // }
+        }, 1);
+
+        moverBaya = setInterval(function() {
+            posicionBaya -= 0.2;
+
+            baya.style.left = posicionBaya + 'rem';
+            if(colision(personaje, baya)) {
+                prohibidoSaltar = false;
+            }
+        }, 1);
+
+        moverTrampolin = setInterval(function() {
+            posicionTrampolin -= 0.2;
+            
+            trampolin.style.left = posicionTrampolin + 'rem';
+            if(colision(personaje, trampolin)) {
+                realizarSalto();
             }
         }, 1);
     }
@@ -218,6 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
         volar = setInterval(function() {
             if(!cambioGravedad) {
                 posicionPersonaje += 0.02;
+                realizarSalto();
             }
 
             personaje.style.bottom = posicionPersonaje + 'rem';
@@ -228,12 +264,17 @@ document.addEventListener('DOMContentLoaded', function() {
         enAire = true;
         
         if(!prohibidoSaltar) {
+            limiteSalto = posicionPersonaje + 10;
+            limiteCaidaLenta = limiteSalto - 1;
+            limiteCaidaMedia = limiteSalto - 2;
+            clearInterval(salto);
+            clearInterval(caida);
             prohibidoSaltar = true;
             salto = this.setInterval(function() {
 
-                if (posicionPersonaje >= 14 && posicionPersonaje < 15){
+                if (posicionPersonaje >= limiteCaidaLenta && posicionPersonaje < limiteSalto) {
                     posicionPersonaje += 0.07;
-                } else if (posicionPersonaje >= 13 && posicionPersonaje < 14) {
+                } else if (posicionPersonaje >= limiteCaidaMedia && posicionPersonaje < limiteCaidaLenta) {
                     posicionPersonaje += 0.17;
                 } else {
                     posicionPersonaje += 0.27;
@@ -241,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 personaje.style.bottom = posicionPersonaje + 'rem';
                 
-                if (posicionPersonaje >= 15) {
+                if (posicionPersonaje >= limiteSalto) {
                     clearInterval(salto);
                     realizarCaida();
                 }
@@ -254,9 +295,9 @@ document.addEventListener('DOMContentLoaded', function() {
         caida = setInterval(function() {
 
             if (!cambioGravedad) {
-                if(posicionPersonaje >= limiteSalto - 1 && posicionPersonaje < limiteSalto) {
+                if(posicionPersonaje >= limiteCaidaLenta && posicionPersonaje < limiteSalto) {
                     posicionPersonaje -= 0.07
-                } else if (posicionPersonaje >= limiteSalto - 2 && posicionPersonaje < limiteSalto - 1) {
+                } else if (posicionPersonaje >= limiteCaidaMedia && posicionPersonaje < limiteCaidaLenta) {
                     posicionPersonaje -= 0.17;
                 } else {
                     posicionPersonaje -= 0.27;
@@ -296,12 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     pause = false;
                     pararIntervalos();
                     establecerNiveles();
-                    contenedorJuego.removeChild(suelo);
-                    contenedorJuego.removeChild(personaje);
-                    contenedorJuego.removeChild(zarzas);
-                    contenedorJuego.removeChild(bloque);
-                    contenedorJuego.removeChild(espejo);
-                    contenedorJuego.removeChild(caja);
+                    quitarElementos();
                 } else {
                     establecerMenu();
                 }

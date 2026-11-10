@@ -22,6 +22,12 @@ a {
     cursor: pointer;
 }
 
+#niveles :hover {
+    background-color: rgb(156, 221, 94);
+    border-radius: 8px;
+    color: black;
+}
+
 #niveles {
     width: 75vw;
 }
@@ -85,10 +91,13 @@ a {
     margin-top: 10rem;
 }
 
+.bloque, .zarzas, .espejo, .caja, .baya, .trampolin {
+    position: absolute;
+}
+
 .bloque, .zarzas {
     height: 7vh;
     width: 3.5vw;
-    position: absolute;
     left: 100rem;
     bottom: 5rem;
 }
@@ -96,15 +105,27 @@ a {
 .espejo {
     height: 10vh;
     width: 3.5vw;
-    position: absolute;
     left: 450rem;
     bottom: 7rem;
 }
 
+.trampolin {
+    height: 10vh;
+    width: 5vw;
+    left: 225rem;
+    bottom: 3.5rem;
+}
+
 .caja {
-    position: absolute;
     height: 10vh;
     width: 5vw;
     left: 250rem;
     bottom: 7rem;
+}
+
+.baya {
+    height: 7vh;
+    width: 3.5vw;
+    left: 200rem;
+    bottom: 10rem;
 }
