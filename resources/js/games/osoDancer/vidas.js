@@ -1,5 +1,4 @@
 import { estado } from "./estado.js";
-import { createMap } from "./mapa.js";
 
 const header = document.getElementById("header");
 const textoTitulo = document.createElement("h1");
@@ -15,7 +14,6 @@ export function perderVida() {
         estado.vidas = 3;
         estado.playerX = 2;
         estado.playerY = 2;
-        createMap();
     }
     textovidas.textContent = "Vidas: " + estado.vidas;
 }

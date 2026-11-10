@@ -2,6 +2,9 @@ import { estado } from "./estado.js";
 import { createMap, matriz } from "./mapa.js";
 import { reiniciarAnimacion } from "./timer.js";
 
+let pasos = 0;
+let mediaPrecision = 0;
+
 document.addEventListener("keydown", (event) => {
     let newX = estado.playerX;
     let newY = estado.playerY;
@@ -23,9 +26,16 @@ document.addEventListener("keydown", (event) => {
             return;
     }
 
-    if (reiniciarAnimacion() === false) {
+    event.preventDefault();
+
+    let precision = reiniciarAnimacion();
+
+    if (precision === 0) {
         return;
     }
+
+    mediaPrecision += precision;
+    pasos++;
 
     const cell = matriz[newY]?.[newX];
 
@@ -35,10 +45,12 @@ document.addEventListener("keydown", (event) => {
         estado.playerX = 2;
         estado.playerY = 2;
     } else if (cell === 3) {
-        alert("¡Has llegado a la salida!");
+        alert("¡Has llegado a la salida!" + "\n Pasos usados: " + pasos + "\n Porcentaje acierto: " + (mediaPrecision / pasos).toFixed(2));
+        pasos = 0;
+        mediaPrecision = 0;
         estado.playerX = 2;
         estado.playerY = 2;
-    }else {
+    } else {
         estado.playerX = newX;
         estado.playerY = newY;
     }
