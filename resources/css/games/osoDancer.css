@@ -5,57 +5,53 @@
 }
 
 body {
-    min-height: 100vh;
     overflow: hidden;
     display: grid;
+    min-height: 100vh;
     place-items: center;
+    background: url("../../assets/fondo.avif") center / 100% 100% no-repeat fixed;
 }
 
 #game {
-    position: relative;
-    width: min(90vw, 950px);
-    aspect-ratio: 19 / 11;
-    overflow: hidden;
+    width: 60vw;
+    height: 30vw;
 }
 
 #map {
     display: grid;
-    grid-template-columns: repeat(19, minmax(0, 1fr));
-    grid-template-rows: repeat(11, minmax(0, 1fr));
+    grid-template: repeat(11, 1fr) / repeat(22, 1fr);
     width: 100%;
     height: 100%;
-    transform: translate(
-        calc(var(--camera-x, 0) * -100% / 19),
-        calc(var(--camera-y, 0) * -100% / 11)
-    );
-    transform-origin: top left;
-    transition: transform 150ms ease-out;
 }
 
 .cell {
-    width: 100%;
-    height: 100%;
     display: grid;
     place-items: center;
 }
 
 .wall {
-    background-color: gray;
-    border: 1px solid #555;
+    background: url("../../assets/arbol.png") center / cover no-repeat;
+    border: 1px solid #c5df8a;
 }
 
 .floor {
-    background-color: white;
-    border: 1px solid #ddd;
-    box-sizing: border-box;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.floor-light {
+    background-image: url("../../assets/sueloClaro.png");
+}
+
+.floor-dark {
+    background-image: url("../../assets/sueloOscuro.png");
 }
 
 .player {
-    position: relative;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: red;
+    width: 80%;
+    height: 80%;
+    background: url("../../assets/oso.png") center / contain no-repeat;
 }
 
 #mensaje {
@@ -83,43 +79,56 @@ body {
 
 .timer-bar {
     position: relative;
-    width: min(750px, 100vw);
-    height: 40px;
+    width: min(950px, 90vw);
+    height: 108px;
     overflow: hidden;
-    background-color: #222;
+    border: 7px solid #000;
+    background-color: #f1f1f1;
+}
+
+.objetivo {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 50%;
+    width: 34px;
+    transform: translateX(-50%);
+    background-color: #888;
 }
 
 .izquierda, .derecha {
     position: absolute;
-    top: 0;
-    width: 50%;
-    height: 100%;
+    top: 9px;
+    width: 12px;
+    height: 74px;
+    z-index: 1;
+    background-color: #000;
 }
 
 .izquierda {
-    background-color: red;
+    left: 0;
     animation: moverIzquierda var(--duracion) linear forwards;
 }
 
 .derecha {
-    background-color: blue;
+    right: 0;
     animation: moverDerecha var(--duracion) linear forwards;
 }
 
 @keyframes moverIzquierda {
     from {
-        left: -50%;
+        left: 0;
     }
     to {
-        left: 0;
+        left: calc(50% - 6px);
     }
 }
 
 @keyframes moverDerecha {
     from {
-        right: -50%;
+        right: 0;
     }
     to {
-        right: 0;
+        right: calc(50% - 6px);
     }
 }

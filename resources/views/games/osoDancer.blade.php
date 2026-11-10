@@ -12,6 +12,7 @@
     </main>
 
     <div class="timer-bar">
+        <div class="objetivo"></div>
         <div class="izquierda"></div>
         <div class="derecha"></div>
     </div>
