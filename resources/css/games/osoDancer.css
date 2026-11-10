@@ -9,7 +9,7 @@ body {
     display: grid;
     min-height: 100vh;
     place-items: center;
-    background: url("../../assets/fondo.avif") center / 100% 100% no-repeat fixed;
+    background: url("../../assets/fondo.png") center / 100% 100% no-repeat fixed;
 }
 
 #game {
