@@ -68,12 +68,40 @@ document.addEventListener('DOMContentLoaded', function() {
         const encabezadoPausa = pantallaPausa.querySelector('h1');
         niveles.forEach(nivel => {
             nivel.addEventListener('click', function() {
+                pantallaActual = 'Juego';
                 encabezadoPausa.textContent = nivel.dataset.nombre;
                 divNiveles.style.display = 'none';
-                comenzarJuego();
+                if (nivel.dataset.nombre === 'StereOso Madness') {
+                    estructuraStereoso(contenedorJuego);
+                } else {
+                    comenzarJuego();
+                }
             })
         })
     })
+
+    function crearEstructura() {
+        estructuraNivel.forEach(elemento => {
+            const imagen = document.createElement('img');
+            imagen.classList.add(elemento.nombre);
+            switch (elemento.nombre) {
+                case 'zarzas':
+                    imagen.src = './imagenes/Zarzas.png';
+                    break;
+                case 'bloque':
+                    imagen.src = './imagenes/Bloque.png';
+                    break;
+                case 'bandera':
+                    imagen.src = './imagenes/Bandera.png';
+                    break;
+            }
+            imagen.style.left = elemento.posicion + 'rem';
+            if(elemento?.posicionBottom) {
+                imagen.style.bottom = elemento.posicionBottom + 'rem';
+            }
+            contenedorJuego.appendChild(imagen);
+        })
+    }
 
     function quitarElementos() {
         contenedorJuego.removeChild(suelo);
@@ -344,8 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case ' ':
                 if (pantallaActual === 'Menu') {
-                    pantallaActual = 'Juego';
-                    comenzarJuego();
+                    establecerNiveles();
                 } else if(pause) {
                     pause = false;
                     pantallaPausa.style.display = 'none';

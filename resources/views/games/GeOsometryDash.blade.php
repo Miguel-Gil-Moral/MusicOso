@@ -47,6 +47,7 @@
 
 <script src='{{ asset('GeOsometryDash/js/script.js') }}'></script>
 <script src='{{ asset('GeOsometryDash/js/colisiones.js') }}'></script>
+<script src="{{ asset('GeOsometryDash/js/stereoso_madness.js') }}"></script>
 
 @endsection
 {{-- 
