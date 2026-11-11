@@ -91,7 +91,7 @@ a {
     margin-top: 10rem;
 }
 
-.bloque, .zarzas, .espejo, .caja, .baya, .trampolin {
+.bloque, .zarzas, .espejo, .caja, .baya, .trampolin, .bandera {
     position: absolute;
 }
 
@@ -128,4 +128,10 @@ a {
     width: 3.5vw;
     left: 200rem;
     bottom: 10rem;
+}
+
+.bandera {
+    height: 20vh;
+    width: 5vw;
+    bottom: 5rem;
 }
