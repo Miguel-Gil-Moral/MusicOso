@@ -1,22 +1,27 @@
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>My App</title>
-        @vite('resources/css/welcome.css')
-    </head>
+    <title>Selección de niveles</title>
 
-    <body class="welcome-page">
-        <div
-            class="welcome-background"
-            aria-hidden="true"
-        ></div>
+    @vite('resources/css/welcome.css')
+</head>
 
-        <div class="welcome-content">
-            <h1>Welcome to My App</h1>
-            <a href="{{ route('games.osoDancer') }}">Go to Oso Dancer Game</a>
-        </div>
-    </body>
+<body class="welcome-page">
+
+    <div class="welcome-background">
+
+        @for ($i = 1; $i <= 9; $i++)
+        <a href="{{ route('games.osoDancer') }}"
+           class="boton-nivel nivel-{{ $i }}"
+           aria-label="Jugar nivel {{ $i }}">
+        </a>
+        @endfor
+
+    </div>
+
+</body>
 </html>

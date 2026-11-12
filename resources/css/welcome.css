@@ -13,22 +13,95 @@ body {
     position: relative;
     width: 100%;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
+/* IMAGEN DE FONDO */
 .welcome-background {
+    position: relative;
     width: 100%;
     aspect-ratio: 887 / 1774;
+
     background-image: url("../assets/fondoNiveles.svg");
     background-position: top center;
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
 
-.welcome-content {
+/* BOTONES DE NIVELES */
+.boton-nivel {
     position: absolute;
-    top: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: 100%;
+
+    width: 12%;
+    aspect-ratio: 1 / 1;
+
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+
+    transition: scale 0.2s ease;
+}
+
+/* EFECTO AL PASAR EL RATÓN */
+.boton-nivel:hover {
+    scale: 1.1;
+}
+
+/* POSICIÓN NIVEL 1 */
+.nivel-1 {
+    top: 76%;
+    left: 63%;
+    background-image: url("../assets/niveles/nivel_01_activo.png");
+}
+
+/* POSICIONES PARA FUTUROS NIVELES */
+.nivel-2 {
+    top: 67%;
+    left: 37%;
+    background-image: url("../assets/niveles/nivel_02_activo.png");
+}
+
+.nivel-3 {
+    top: 59%;
+    left: 62%;
+    background-image: url("../assets/niveles/nivel_03_activo.png");
+}
+
+.nivel-4 {
+    top: 51.5%;
+    left: 37%;
+    background-image: url("../assets/niveles/nivel_04_activo.png");
+}
+
+.nivel-5 {
+    top: 45.5%;
+    left: 57%;
+    background-image: url("../assets/niveles/nivel_05_activo.png");
+}
+
+.nivel-6 {
+    top: 35%;
+    left: 32%;
+    background-image: url("../assets/niveles/nivel_06_activo.png");
+}
+
+.nivel-7 {
+    top: 29%;
+    left: 56%;
+    background-image: url("../assets/niveles/nivel_07_activo.png");
+}
+
+.nivel-8 {
+    top: 21.5%;
+    left: 37.5%;
+    background-image: url("../assets/niveles/nivel_08_activo.png");
+}
+
+.nivel-9 {
+    top: 13%;
+    left: 61.5%;
+    background-image: url("../assets/niveles/nivel_09_activo.png");
 }
