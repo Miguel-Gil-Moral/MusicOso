@@ -9,7 +9,7 @@ body {
     display: grid;
     min-height: 100vh;
     place-items: center;
-    background: url("../../assets/fondo.png") center / 100% 100% no-repeat fixed;
+    background: url("../../assets/osoDancer/fondoCielo.svg") center center / cover no-repeat fixed;
 }
 
 #game {
@@ -30,7 +30,7 @@ body {
 }
 
 .wall {
-    background: url("../../assets/arbol.png") center / cover no-repeat;
+    background: url("../../assets/osoDancer/arbol.png") center / cover no-repeat;
     border: 1px solid #c5df8a;
 }
 
@@ -41,17 +41,17 @@ body {
 }
 
 .floor-light {
-    background-image: url("../../assets/sueloClaro.png");
+    background-image: url("../../assets/osoDancer/sueloClaro.png");
 }
 
 .floor-dark {
-    background-image: url("../../assets/sueloOscuro.png");
+    background-image: url("../../assets/osoDancer/sueloOscuro.png");
 }
 
 .player {
     width: 80%;
     height: 80%;
-    background: url("../../assets/oso.png") center / contain no-repeat;
+    background: url("../../assets/osoDancer/oso.png") center / contain no-repeat;
 }
 
 #mensaje {
