@@ -11,6 +11,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/css/games/osoDancer.css',
                 'resources/js/games/osoDancer/app.js',
+                'resources/css/games/GuitarherOso.css',
+                'resources/js/games/GuitarherOso/Controls.js',
             ],
             refresh: true,
             fonts: [

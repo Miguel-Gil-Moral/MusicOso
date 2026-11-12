@@ -5,6 +5,7 @@ div {
 
 body {
     margin: 0;
+    background-color: #e5e7eb;
 }
 
 #Pantalla_principal {
@@ -24,8 +25,106 @@ body {
 
 .Gameplay-container {
     display: flex;
+    align-items: center;
+    gap: 2vw;
     width: auto;
     height: auto;
+}
+
+.controles-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    height: 50vh;
+    width: 7vw;
+    min-height: 260px;
+}
+
+.combo {
+    --combo-shake-distance: 4px;
+    --combo-shake-rotation: 4deg;
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    min-height: 1.5em;
+    font-size: 1.25rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.combo-agitado {
+    animation: agitar-combo 0.5s ease-in-out;
+}
+
+@keyframes agitar-combo {
+    0% {
+        margin-left: 0;
+        margin-top: 0;
+        rotate: 0deg;
+        scale: 1;
+    }
+
+    20% {
+        margin-left: calc(var(--combo-shake-distance) * -1);
+        margin-top: var(--combo-shake-distance);
+        rotate: calc(var(--combo-shake-rotation) * -1);
+        scale: 1.15;
+    }
+
+    40% {
+        margin-left: var(--combo-shake-distance);
+        margin-top: calc(var(--combo-shake-distance) * -1);
+        rotate: var(--combo-shake-rotation);
+        scale: 1.25;
+    }
+
+    60% {
+        margin-left: calc(var(--combo-shake-distance) * -1);
+        margin-top: 0;
+        rotate: calc(var(--combo-shake-rotation) * -0.75);
+        scale: 1.1;
+    }
+
+    80% {
+        margin-left: var(--combo-shake-distance);
+        margin-top: var(--combo-shake-distance);
+        rotate: calc(var(--combo-shake-rotation) * 0.5);
+        scale: 1.15;
+    }
+
+    100% {
+        margin-left: 0;
+        margin-top: 0;
+        rotate: 0deg;
+        scale: 1;
+    }
+}
+
+.feedback-precision {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    z-index: 3;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.feedback-pronto {
+    color: #b45309;
+}
+
+.feedback-perfecto {
+    color: #15803d;
+}
+
+.feedback-super-perfecto {
+    color: #d4a017;
+    text-shadow: 0 0 4px #fef3c7;
+}
+
+.feedback-tarde {
+    color: #b91c1c;
 }
 /*
 .Gameplay {
@@ -33,6 +132,8 @@ body {
 }
 */
 #Pentagrama {
+    --hit-line-position: calc(7.5% - 4.5px);
+    --quarter-note-duration: 400ms;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -43,14 +144,76 @@ body {
     box-sizing: border-box;
 }
 
+#Pentagrama::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--hit-line-position);
+    width: 4px;
+    height: 100%;
+    background-color: #dc2626;
+    z-index: 1;
+    pointer-events: none;
+    transform-origin: center;
+    animation: marcar-pulso var(--quarter-note-duration) ease-in-out infinite;
+}
+
+.mensaje-juego {
+    min-height: 1.5em;
+    margin: 0;
+    color: #b91c1c;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+
+.mensaje-juego-visible {
+    opacity: 1;
+}
+
+.barra-nivel {
+    --bar-width: 32px;
+    position: relative;
+    width: var(--bar-width);
+    height: 50vh;
+    min-height: 260px;
+    background: linear-gradient(to bottom, #22c55e 0%, #facc15 50%, #dc2626 100%);
+    box-sizing: border-box;
+}
+
+@keyframes marcar-pulso {
+    0%,
+    100% {
+        transform: translateX(0) scaleX(1);
+    }
+
+    50% {
+        transform: translateX(0) scaleX(1.7);
+    }
+}
+
+.marcador-nivel {
+    --nivel: 50%;
+    position: absolute;
+    top: var(--nivel);
+    left: 50%;
+    width: 100%;
+    height: 12px;
+    border: 2px solid black;
+    background-color: white;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    transition: top 0.18s ease;
+}
+
 #Controles {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 1vh solid black;
-    height: 50vh;
-    width: 7vw;
+    height: 100%;
+    width: 100%;
     box-sizing: border-box;
 }
 
@@ -66,13 +229,22 @@ body {
 }
 
 .figura-musical {
+    --note-travel-duration: 5000ms;
     position: absolute;
     left: calc(100% - 70px);
     width: 70px;
     height: 90px;
     object-fit: contain;
     z-index: 2;
-    animation: mover-nota 2s linear forwards;
+    animation: mover-nota var(--note-travel-duration) linear forwards;
+}
+
+.nota-fantasma {
+    left: calc(7.5% - 35px + var(--ghost-row-offset, 0px));
+    opacity: var(--ghost-opacity);
+    animation: none;
+    pointer-events: none;
+    z-index: 1;
 }
 
 @keyframes mover-nota {
@@ -113,6 +285,7 @@ body {
 }
 
 .control {
+    position: relative;
     border: 3px solid black;
     transition: background-color 0.18s ease;
 }
@@ -132,6 +305,12 @@ body {
   width: 100%;
   height: 0.5vh;
   background-color: black;
+}
+
+.linea-blanca {
+  width: 100%;
+  height: 0.5vh;
+  background-color: white;
 }
 /*
 #G {
