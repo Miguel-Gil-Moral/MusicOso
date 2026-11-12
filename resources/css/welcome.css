@@ -1,0 +1,34 @@
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.welcome-page {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.welcome-background {
+    width: 100%;
+    aspect-ratio: 887 / 1774;
+    background-image: url("../assets/fondoNiveles.svg");
+    background-position: top center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.welcome-content {
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
