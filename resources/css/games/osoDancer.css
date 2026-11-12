@@ -30,8 +30,11 @@ body {
 }
 
 .wall {
-    background: url("../../assets/osoDancer/arbol.png") center / cover no-repeat;
-    border: 1px solid #c5df8a;
+    background: url("../../assets/osoDancer/arbolClaro.png") center / cover no-repeat;
+}
+
+.wall-dark {
+    background-image: url("../../assets/osoDancer/arbolOscuro.png");
 }
 
 .floor {

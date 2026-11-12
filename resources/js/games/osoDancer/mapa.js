@@ -27,6 +27,9 @@ export function createMap() {
 
             if (matriz[y][x] === 1) {
                 cell.classList.add("wall");
+                if ((x + y) % 2 === 1) {
+                    cell.classList.add("wall-dark");
+                }
             } else if (matriz[y][x] === 2) {
                 cell.classList.add("tower");
             } else if (matriz[y][x] === 3) {
