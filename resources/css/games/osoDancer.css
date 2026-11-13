@@ -17,6 +17,14 @@ body {
     height: 30vw;
 }
 
+#vidas {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100vw;
+    padding-left: 60px;
+}
 #map {
     display: grid;
     grid-template: repeat(11, 1fr) / repeat(22, 1fr);
