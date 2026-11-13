@@ -36,10 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     establecerMenu();
 
-    var estructuraNivel = [];
+    var iteracionBloques, iteracionZarzas;
+    var estructuraNivel = [], audio;
     var salto, caida, personajeChocado, volar, enAire = false, pause, cambioGravedad = false, prohibidoSaltar = false;
     var pantallaActual = 'Menu', modoActual = 'Cubo';
-    var moverFondo, moverSuelo, moverBloque, moverZarza, moverEspejo, moverCaja, moverBaya, moverTrampolin, moverBandera;
+    var moverFondo, moverElementos, moverEspejo, moverCaja, moverBaya, moverTrampolin;
     var posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
     posicionPersonaje = 5, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225, posicionBandera = 1000;
     limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
@@ -73,6 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 encabezadoPausa.textContent = nivel.dataset.nombre;
                 divNiveles.style.display = 'none';
                 if (nivel.dataset.nombre === 'StereOso Madness') {
+                    audio = new Audio('../GeOsometryDash/audio/stereo_madness.mp3');
+                    audio.volume = 0.05;
+                    audio.play();
                     estructuraNivel = getEstructuraStereoso();
                     crearEstructura();
                     comenzarJuego();
@@ -85,6 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function crearEstructura() {
         let posicionBottom = 5;
+        let divTopBloque;
+        contenedorJuego.appendChild(suelo);
         estructuraNivel.forEach(elemento => {
             posicionBottom = 5;
             const imagen = document.createElement('img');
@@ -95,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'bloque':
                     imagen.src = '../GeOsometryDash/imagenes/Bloque.png';
+                    divTopBloque = document.createElement('div');
+                    divTopBloque.classList.add('bloqueTop');
                     break;
                 case 'bandera':
                     imagen.src = '../GeOsometryDash/imagenes/Bandera.png';
@@ -106,16 +114,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 if(!elemento?.bloquesDetras) {
                     for (let i = 0; i < elemento.bloquesEncima; i++) {
                         posicionBottom += 3.5;
-                        console.log(elemento.posicion, posicionBottom);
                         const bloqueEncima = document.createElement('img');
                         bloqueEncima.classList.add('bloque');
                         bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
                         bloqueEncima.style.left = elemento.posicion + 'rem';
                         bloqueEncima.style.bottom = posicionBottom + 'rem';
                         contenedorJuego.appendChild(bloqueEncima);
-                        console.log('Bloque encima creado en posición:', elemento.posicion, 'con bottom:', posicionBottom);
                     }
                 }
+            }
+            if(elemento.nombre === 'bloque'){
+                divTopBloque.style.left = elemento.posicion + 'rem';
+                divTopBloque.style.bottom = posicionBottom + 3.5 + 'rem';
+                contenedorJuego.appendChild(divTopBloque);
             }
         })
     }
@@ -147,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     botonReanudar.addEventListener('click', function(){
         pause = false;
+        // audio.play();
         pantallaPausa.style.display = 'none';
         arrancarJuego();
         if (enAire) {
@@ -162,6 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
     function comenzarJuego() {
+        audio.currentTime = 0;
+        audio.play();
         modoActual = 'Cubo';
         posicionFondo = 0.00, posicionSuelo = 0.00;
         posicionPersonaje = 5, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
@@ -171,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
         prohibidoSaltar = false;
 
         pararIntervalos();
-        contenedorJuego.appendChild(suelo);
         contenedorJuego.appendChild(personaje);
         contenedorJuego.appendChild(baya);
         contenedorJuego.appendChild(espejo);
@@ -192,14 +205,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function pararIntervalos() {
         clearInterval(moverFondo);
-        clearInterval(moverSuelo);
-        clearInterval(moverBloque);
-        clearInterval(moverZarza);
+        clearInterval(moverElementos);
         clearInterval(moverEspejo);
         clearInterval(moverCaja);
         clearInterval(moverBaya);
         clearInterval(moverTrampolin);
-        clearInterval(moverBandera);
         clearInterval(salto);
         clearInterval(caida);
         clearInterval(volar);
@@ -209,80 +219,70 @@ document.addEventListener('DOMContentLoaded', function() {
     //Funcionamiento juego
     function arrancarJuego() {
         pantallaActual = 'Juego';
-        let posicionBloques = [];
+        let posicionBloques, posicionZarzas;
         moverFondo = setInterval(function() {
             posicionFondo += 0.01;
-
-            contenedorJuego.style.backgroundPositionX = posicionFondo + '%';
-        }, 1);
-
-        moverSuelo = setInterval(function() {
             posicionSuelo -= 0.5;
 
+            contenedorJuego.style.backgroundPositionX = posicionFondo + '%';
             suelo.style.backgroundPositionX = posicionSuelo + '%';
         }, 1);
 
-        moverBloque = setInterval(function() {
-            posicionBloques = [];
+        moverElementos = setInterval(function() {
+            iteracionBloques = 0, iteracionZarzas = 0;
+            posicionBloques = [], posicionZarzas = [];
             const bloques = document.querySelectorAll('.bloque');
+            const topBloques = document.querySelectorAll('.bloqueTop');
+            const zarzas = document.querySelectorAll('.zarzas');
+            const bandera = document.querySelector('.bandera');
             estructuraNivel.forEach(elemento => {
-                if (elemento.nombre === 'bloque') {
-                    elemento.posicion -= 0.2;
-                    if(elemento?.bloquesEncima) {
-                        for (let i = 0; i < elemento.bloquesEncima; i++) {
-                            posicionBloques.push(elemento.posicion);
+                elemento.posicion -= 0.2;
+                switch (elemento.nombre) {
+                    case 'zarzas':
+                        zarzas[iteracionZarzas].style.left = elemento.posicion + 'rem';
+                        
+                        if(colision(personaje, zarzas[iteracionZarzas])){
+                            audio.pause();
+                            prohibidoSaltar = true;
+                            pararIntervalos();
+                            clearInterval(salto);
+                            personajeChocado = setInterval(function() {
+                                enAire = false;
+                                crearEstructura();
+                                comenzarJuego();
+                            }, 2000)
                         }
-                    }
-                    posicionBloques.push(elemento.posicion);
+                        iteracionZarzas++;
+                        break;
+                    case 'bloque':
+                        bloques[iteracionBloques].style.left = elemento.posicion + 'rem';
+
+                        iteracionBloques++;
+                        break;
+                    case 'bandera':
+                        bandera.style.left = elemento.posicion + 'rem';
+                        break;
                 }
+                // if (elemento.nombre === 'bloque') {
+                //     elemento.posicion -= 0.2;
+                //     if(elemento?.bloquesEncima) {
+                //         for (let i = 0; i < elemento.bloquesEncima; i++) {
+                //             posicionBloques.push(elemento.posicion);
+                //         }
+                //     }
+                //     posicionBloques.push(elemento.posicion);
+                // }
             });
-            console.log('Posiciones de bloques actualizadas:', posicionBloques);
+
             for (let i = 0; i < bloques.length; i++) {
                 bloques[i].style.left = posicionBloques[i] + 'rem';
-            }
-            
-            // if (colision(personaje, bloque)) {
-            //     console.log('Chocado');
-            // } else if (colisionTopBloque(personaje, bloque)) {
-            //     clearInterval(caida);
-            // }
-
-            // if (colisionBloque(personaje, bloque, posicionPersonaje) == 'Chocado'){
-            //     pararIntervalos();
-            //     clearInterval(salto);
-            //     personajeChocado = setInterval(function() {
-            //         enAire = false;
-            //         comenzarJuego();
-            //     }, 2000)
-            // }
-            // else if (colisionBloque(personaje, bloque) == 'Encima') {
-            //     clearInterval(caida);
-            // }
-        }, 1);
-
-        moverZarza = setInterval(function() {
-            const zarzas = document.querySelectorAll('.zarzas');
-            let posicionZarzas = [];
-            estructuraNivel.forEach(elemento => {
-                if (elemento.nombre === 'zarzas') {
-                    elemento.posicion -= 0.2;
-                    posicionZarzas.push(elemento.posicion);
-                }
-            });
-
-            for (let i = 0; i < zarzas.length; i++) {
-                zarzas[i].style.left = posicionZarzas[i] + 'rem';
-
-                // if(colision(personaje, zarzas[i])){
-                //     prohibidoSaltar = true;
-                //     pararIntervalos();
-                //     clearInterval(salto);
-                //     personajeChocado = setInterval(function() {
-                //         enAire = false;
-                //         comenzarJuego();
-                //     }, 2000)
+                // if (colision(personaje, topBloques[i])) {
+                //     console.log('Ha chocado');
+                // } else if (colisionBloque(personaje, bloques[i])) {
+                //     console.log('Ha chocado X');
                 // }
             }
+            
         }, 1);
 
         moverCaja = setInterval(function() {
@@ -321,13 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if(colision(personaje, trampolin)) {
                 realizarSalto();
             }
-        }, 1);
-
-        moverBandera = setInterval(function() {
-            const bandera = document.querySelector('.bandera');
-            posicionBandera -= 0.2;
-
-            bandera.style.left = posicionBandera + 'rem';
         }, 1);
     }
 
@@ -411,6 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
         switch(event.key){
             case 'Escape':
                 if (!pause && pantallaActual === 'Juego') {
+                    audio.pause();
                     pararIntervalos();
                     pantallaPausa.style.display = 'flex';
                     pause = true;
