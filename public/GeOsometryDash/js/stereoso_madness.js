@@ -27,6 +27,17 @@ const estructuraJuego = [
     { nombre: 'bloque', posicion: 489.2 },
     { nombre: 'bloque', posicion: 492.2 },
     { nombre: 'bloque', posicion: 495.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 498.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 501.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 504.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 507.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 510.2, bloquesEncima: 1, zarzasEncima: true },
+    { nombre: 'bloque', posicion: 513.2, bloquesEncima: 1, zarzasEncima: true },
+    { nombre: 'bloque', posicion: 516.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 519.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 522.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 525.2, bloquesEncima: 1 },
+    { nombre: 'bloque', posicion: 528.2, bloquesEncima: 1 },
     { nombre: 'bandera', posicion: 1000 }
 ];
 

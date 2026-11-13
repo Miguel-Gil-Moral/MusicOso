@@ -17,7 +17,7 @@ function colisionTopBloque(personaje, bloque) {
     return !(
         el1.right > el2.left ||
         el1.left < el2.right ||
-        el1.bottom >= el2.top ||
-        el1.top <= el2.bottom
+        el1.bottom >= el2.top - (16 * 2) ||
+        el1.top <= el2.bottom + (16 * 2)
     )
 }
