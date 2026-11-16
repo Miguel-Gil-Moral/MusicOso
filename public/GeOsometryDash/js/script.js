@@ -1,4 +1,36 @@
+    let estructuraNivel = [], audio;
+
+    /** NUEVO **/
+
+    let enAire = false;
+    let pause = false;
+    let cambioGravedad = false;
+    let prohibidoSaltar = false;
+
+    let pantallaActual = 'Menu';
+    let modoActual = 'Cubo';
+
+    // Main animation loop
+    let animationFrameId = null;
+    let ultimoFrame = 0;
+
+    // Character movement
+    let estadoPersonaje = 'quieto';
+
+    // Death timer
+    let tiempoMuerte = null;
+    let muriendo = false;
+
+
+    /** FIN NUEVO */
+
+    let posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
+    posicionPersonaje = 5, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
+    limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
+
 document.addEventListener('DOMContentLoaded', function() {
+   
+   const velocidad = 3.5; // Aplicar a los elementos que aparezcan lentos
     const contenedorJuego = document.getElementById('contenedorJuego');
     const boton = document.getElementById('botonJuego');
     const pantallaPausa = document.getElementById('pantallaPausa');
@@ -28,16 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
     personaje.src = '../GeOsometryDash/imagenes/Oso.jpg';
     personaje.id = 'personaje';
 
-    establecerMenu();
-
-    var estructuraNivel = [], audio;
-    var salto, caida, personajeChocado, volar, enAire = false, pause, cambioGravedad = false, prohibidoSaltar = false;
-    var pantallaActual = 'Menu', modoActual = 'Cubo';
-    var moverFondo, moverElementos, moverEspejo, moverCaja, moverBaya, moverTrampolin;
-    var posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
-    posicionPersonaje = 5, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
-    limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
-    
+    establecerMenu();    
     
     function establecerMenu() {
         divNiveles.style.display = 'none';
@@ -76,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         break;
                     case 'UltraOso':
                         audio = new Audio('../GeOsometryDash/audio/sonic_blaster.mp3');
+                        estructuraNivel = getEstructuraUltraOso();
                         break;
                 }
                 if (nivel.dataset.nombre === 'StereOso Madness') {
@@ -112,13 +136,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     imagen.src = '../GeOsometryDash/imagenes/Bandera.png';
                     break;
             }
-            if (elemento.posicion <= 300) {
+            // if (elemento.posicion <= 300) {
                 elemento.visible = true;
                 imagen.style.left = elemento.posicion + 'rem';
                 contenedorJuego.appendChild(imagen);
-            } else {
-                elemento.visible = false;
-            }
+            // } else {
+            //     elemento.visible = false;
+            // }
             temp.push(elemento);
             if(elemento?.bloquesEncima && elemento.visible) {
                 for (let i = 0; i < elemento.bloquesEncima; i++) {
@@ -230,107 +254,192 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function pararIntervalos() {
-        clearInterval(moverFondo);
-        clearInterval(moverElementos);
-        clearInterval(moverEspejo);
-        clearInterval(moverCaja);
-        clearInterval(moverBaya);
-        clearInterval(moverTrampolin);
-        clearInterval(salto);
-        clearInterval(caida);
-        clearInterval(volar);
-        clearInterval(personajeChocado);
+        if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+             animationFrameId = null;
+         }
+
+        ultimoFrame = 0;
     }
 
     //Funcionamiento juego
     function arrancarJuego() {
         pantallaActual = 'Juego';
-        moverFondo = setInterval(function() {
-            posicionFondo += 0.01;
-            posicionSuelo -= 0.5;
+        
+       
+        /** VARIABLES NUEVAS */
 
-            contenedorJuego.style.backgroundPositionX = posicionFondo + '%';
-            suelo.style.backgroundPositionX = posicionSuelo + '%';
-        }, 1);
-        let iteraciones = [0, 0, 0]; //Zarzas, bloques, bloquesTop
-        let bloques = document.querySelectorAll('.bloque');
-        let topBloques = document.querySelectorAll('.bloqueTop');
-        let zarzas = document.querySelectorAll('.zarzas');
-        let bandera = document.querySelector('.bandera');
-        moverElementos = setInterval(function() {
-            iteraciones = [0, 0, 0];
-            for (let i = 0; i < estructuraNivel.length; i++){
-                estructuraNivel[i].posicion -= 0.2;
-                agregarElemento(i, estructuraNivel[i].nombre);
-                if (estructuraNivel[i].visible){
-                    switch (estructuraNivel[i].nombre) {
-                        case 'zarzas':
-                            zarzas[iteraciones[0]].style.left = estructuraNivel[i].posicion + 'rem';
-                            if(colision(personaje, zarzas[iteraciones[0]])){
-                                personajeCaido();
-                            }
-                            eliminarElemento(i, zarzas[iteraciones[0]]);
-                            iteraciones[0]++;
-                            break;
-                        case 'bloque':
-                            bloques[iteraciones[1]].style.left = estructuraNivel[i].posicion + 'rem';
-                            eliminarElemento(i, zarzas[iteraciones[1]]);
-                            iteraciones[1]++;
-                            break;
-                        case 'bloqueTop':
-                            topBloques[iteraciones[2]].style.left = estructuraNivel[i].posicion + 'rem';
-                            if (colisionTopBloque(personaje, topBloques[iteraciones[2]])){
-                                console.log('Ha chocado');
-                            }
-                            eliminarElemento(i, zarzas[iteraciones[2]]);
-                            iteraciones[2]++;
-                            break;
-                        case 'bandera':
-                            bandera.style.left = estructuraNivel[i].posicion - 0.2 + 'rem';
-                            break;
+          muriendo = false;
+         tiempoMuerte = null;
+        ultimoFrame = 0;
+
+         animationFrameId = requestAnimationFrame(bucleJuego);
+
+        function bucleJuego(tiempoActual) {
+
+            if (ultimoFrame === 0) {
+                ultimoFrame = tiempoActual;
+            }
+
+            // Tiempo que ha pasado desde el último frame
+            // 16.67 ms represents approximately 60 FPS.
+            let deltaTime = (tiempoActual - ultimoFrame) /  16.67;
+       
+            // Avoid enormous movements after a tab is inactive.
+             deltaTime = Math.min(deltaTime, 2);
+
+            ultimoFrame = tiempoActual;
+
+             // Comprobamos si el personaje ha muerto
+            if (muriendo) {
+                if (tiempoActual - tiempoMuerte >= 2000) {
+                    reiniciarJuego();
+                    return; 
+                } 
+            } else {
+                    actualizarFondo(deltaTime);
+                    actualizarObstaculos(deltaTime);
+                    actualizarObjetosEspeciales(deltaTime);
+                    actualizarPersonaje(deltaTime);
+                    comprobarColisiones();
+            }
+
+            // Solicitamos el siguiente fotograma
+            animationFrameId = requestAnimationFrame(bucleJuego);
+         }
+
+    }
+
+    function actualizarFondo(deltaTime) {
+
+        // Antes movías +0,01 por cada milisegundo. Ahora es lo mismo * 16 (cada FPS)
+        posicionFondo += 0.01 * deltaTime *  16.67;
+        posicionSuelo -= 0.5 * deltaTime * 7;
+
+        contenedorJuego.style.backgroundPositionX =
+            posicionFondo + '%';
+
+        suelo.style.backgroundPositionX =
+            posicionSuelo + '%';
+    }
+
+    function actualizarObstaculos(deltaTime) {
+
+        let iteraciones = [0, 0, 0];
+
+        const bloques = document.querySelectorAll('.bloque');
+        const topBloques = document.querySelectorAll('.bloqueTop');
+        const zarzas = document.querySelectorAll('.zarzas');
+        const bandera = document.querySelector('.bandera');
+
+        for (let i = 0; i < estructuraNivel.length; i++) {
+
+            estructuraNivel[i].posicion -= 0.2 * deltaTime * velocidad;
+
+            if (estructuraNivel[i].visible){
+                switch (estructuraNivel[i].nombre) {
+                    case 'zarzas':
+                        zarzas[iteraciones[0]].style.left = estructuraNivel[i].posicion + 'rem';
+                        eliminarElemento(i, zarzas[iteraciones[0]]);
+                        iteraciones[0]++;
+                        break;
+                    case 'bloque':
+                        bloques[iteraciones[1]].style.left =   estructuraNivel[i].posicion + 'rem';
+                        eliminarElemento(i, bloques[iteraciones[1]]);
+                        iteraciones[1]++;
+                        break;
+                    case 'bloqueTop':
+                        topBloques[iteraciones[2]].style.left = estructuraNivel[i].posicion + 'rem';
+                        eliminarElemento(i, topBloques[iteraciones[2]]);
+                        iteraciones[2]++;
+                        break;
+                    case 'bandera':
+                        bandera.style.left =estructuraNivel[i].posicion + 'rem';
+                        break;
+                }
+
+            }
+
+        }
+    }
+
+    function actualizarObjetosEspeciales(deltaTime) {
+
+        // Caja
+        posicionCaja -= 0.2 * deltaTime * velocidad;
+        caja.style.left = posicionCaja + 'rem';
+
+        // Espejo
+        posicionEspejo -= 0.2 * deltaTime * velocidad;
+        espejo.style.left = posicionEspejo + 'rem';
+
+        // Baya
+        posicionBaya -= 0.2 * deltaTime * velocidad;
+        baya.style.left = posicionBaya + 'rem';
+
+        // Trampolín
+        posicionTrampolin -= 0.2 * deltaTime * velocidad;
+        trampolin.style.left = posicionTrampolin + 'rem';
+}
+
+// TOCAR LOS VALORES Y/O AÑADIR MULTIPLICADOR DE VELOCIDAD PARA AJUSTAR LA CURVA DE SALTO
+    function actualizarPersonaje(deltaTime) {
+        switch (estadoPersonaje) {
+            case 'saltando':
+                if (posicionPersonaje >= limiteCaidaLenta &&
+                    posicionPersonaje < limiteSalto) {
+                    posicionPersonaje += 0.07 * deltaTime * velocidad;
+                } else if (posicionPersonaje >= limiteCaidaMedia &&
+                    posicionPersonaje < limiteCaidaLenta) {
+                    posicionPersonaje += 0.17 * deltaTime * velocidad;
+                } else {
+                    posicionPersonaje += 0.27 * deltaTime * velocidad;
+                }
+                if (posicionPersonaje >= limiteSalto) {
+                    posicionPersonaje = limiteSalto;
+                    realizarCaida();
+                }
+                break;
+            case 'cayendo':
+                if (!cambioGravedad) {
+                    if (posicionPersonaje >= limiteCaidaLenta &&
+                        posicionPersonaje < limiteSalto) {
+                        posicionPersonaje -= 0.07 * deltaTime * velocidad;
+                    } else if (posicionPersonaje >= limiteCaidaMedia &&
+                        posicionPersonaje < limiteCaidaLenta) {
+                        posicionPersonaje -= 0.17 * deltaTime * velocidad;
+                    } else {
+                        posicionPersonaje -= 0.27 * deltaTime * velocidad;
+                    }
+                } else {
+                    limiteCaidaLenta = posicionPersonaje + 1;
+                    limiteCaidaMedia = posicionPersonaje + 2;
+                    if (posicionPersonaje >= limiteCaidaLenta) {
+                        posicionPersonaje += 0.07 * deltaTime * velocidad;
+
+                    } else if (posicionPersonaje >= limiteCaidaMedia) {
+                        posicionPersonaje += 0.17 * deltaTime * velocidad;
+
+                    } else {
+                        posicionPersonaje += 0.27 * deltaTime * velocidad;
                     }
                 }
-            }
-        }, 1);
-
-        moverCaja = setInterval(function() {
-            posicionCaja -= 0.2;
-
-            caja.style.left = posicionCaja + 'rem';
-            // if(colision(personaje, caja)) {
-            //     modoActual = 'Nave';
-            // }
-        }, 1);
-
-        moverEspejo = setInterval(function() {
-            posicionEspejo -= 0.2;
-
-            espejo.style.left = posicionEspejo + 'rem';
-
-            // if(colision(personaje, espejo)) {
-            //     cambioGravedad = true;
-            //     realizarCaida();
-            // }
-        }, 1);
-
-        moverBaya = setInterval(function() {
-            posicionBaya -= 0.2;
-
-            baya.style.left = posicionBaya + 'rem';
-            if(colision(personaje, baya)) {
-                prohibidoSaltar = false;
-            }
-        }, 1);
-
-        moverTrampolin = setInterval(function() {
-            posicionTrampolin -= 0.2;
-            
-            trampolin.style.left = posicionTrampolin + 'rem';
-            if(colision(personaje, trampolin)) {
-                realizarSalto();
-            }
-        }, 1);
+                if (posicionPersonaje <= sueloPersonaje) {
+                    posicionPersonaje = sueloPersonaje;
+                    estadoPersonaje = 'quieto';
+                    enAire = false;
+                    prohibidoSaltar = false;
+                }
+                break;
+            case 'volando':
+                if (!cambioGravedad) {
+                    posicionPersonaje += 0.02 * deltaTime * velocidad;
+                }
+                break;
+        }
+        personaje.style.bottom = posicionPersonaje + 'rem';
     }
+
 
     function eliminarElemento(iteracionEstructura, elemento) {
         if (estructuraNivel[iteracionEstructura].posicion <= -10 && estructuraNivel[iteracionEstructura].visible) {
@@ -339,6 +448,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    /// REVISAR: NO SE USA (tampoco en el original)
     function agregarElemento(iteracionEstructura) {
         if (estructuraNivel[iteracionEstructura].posicion > -10 && 
             estructuraNivel[iteracionEstructura].posicion <= 300 &&
@@ -365,17 +475,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             elemento.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
             contenedorJuego.appendChild(elemento);
+            if (estructuraNivel[iteracionEstructura]?.bloquesEncima) {
+                let posicionBottom = 5;
+                for (let i = 0; i < estructuraNivel[iteracionEstructura].bloquesEncima; i++) {
+                    posicionBottom += 3.5;
+                    const bloqueEncima = document.createElement('img');
+                    bloqueEncima.classList.add('bloque');
+                    bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
+                    bloqueEncima.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
+                    bloqueEncima.style.bottom = posicionBottom + 'rem';
+                    contenedorJuego.appendChild(bloqueEncima);
+                }
+            }
         }
     }
 
     function personajeCaido() {
+        if (muriendo) return;
+
         audio.pause();
-        pararIntervalos();
-        clearInterval(salto);
-        personajeChocado = setInterval(function() {
-            enAire = false;
-            reiniciarJuego();
-        }, 2000)
+
+        muriendo = true;
+        tiempoMuerte = performance.now();
+
+        estadoPersonaje = 'quieto';
+        enAire = false;
     }
 
     function reiniciarJuego() {
@@ -385,16 +509,7 @@ document.addEventListener('DOMContentLoaded', function() {
         comenzarJuego();
     }
 
-    function nave() {
-        volar = setInterval(function() {
-            if(!cambioGravedad) {
-                posicionPersonaje += 0.02;
-                realizarSalto();
-            }
-
-            personaje.style.bottom = posicionPersonaje + 'rem';
-        }, 1);
-    }
+  
 
     function realizarSalto() {
         enAire = true;
@@ -403,62 +518,26 @@ document.addEventListener('DOMContentLoaded', function() {
             limiteSalto = posicionPersonaje + 10;
             limiteCaidaLenta = limiteSalto - 1;
             limiteCaidaMedia = limiteSalto - 2;
-            clearInterval(salto);
-            clearInterval(caida);
             prohibidoSaltar = true;
-            salto = this.setInterval(function() {
-
-                if (posicionPersonaje >= limiteCaidaLenta && posicionPersonaje < limiteSalto) {
-                    posicionPersonaje += 0.07;
-                } else if (posicionPersonaje >= limiteCaidaMedia && posicionPersonaje < limiteCaidaLenta) {
-                    posicionPersonaje += 0.17;
-                } else {
-                    posicionPersonaje += 0.27;
-                }
-
-                personaje.style.bottom = posicionPersonaje + 'rem';
-                
-                if (posicionPersonaje >= limiteSalto) {
-                    clearInterval(salto);
-                    realizarCaida();
-                }
-            }, 1);
+            
+            // NUEVO --> cambiar estado del personaje
+            // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
+            estadoPersonaje = "saltando";
+            
         }
+
     }
 
+     // NUEVO --> cambiar estado del personaje
+            // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
     function realizarCaida() {
-        clearInterval(caida);
-        caida = setInterval(function() {
+       estadoPersonaje = 'cayendo';
+    }
 
-            if (!cambioGravedad) {
-                if(posicionPersonaje >= limiteCaidaLenta && posicionPersonaje < limiteSalto) {
-                    posicionPersonaje -= 0.07
-                } else if (posicionPersonaje >= limiteCaidaMedia && posicionPersonaje < limiteCaidaLenta) {
-                    posicionPersonaje -= 0.17;
-                } else {
-                    posicionPersonaje -= 0.27;
-                }
-            } else {
-                limiteCaidaLenta = posicionPersonaje + 1;
-                limiteCaidaMedia = posicionPersonaje + 2;
-                if(posicionPersonaje >= limiteCaidaLenta){
-                    posicionPersonaje += 0.07;
-                } else if (posicionPersonaje >= limiteCaidaMedia) {
-                    posicionPersonaje += 0.17;
-                } else {
-                    posicionPersonaje += 0.27;
-                }
-            }
-
-            personaje.style.bottom = posicionPersonaje + 'rem';
-
-            if (posicionPersonaje <= sueloPersonaje) {
-                clearInterval(caida);
-                personaje.style.bottom = sueloPersonaje + 'rem';
-                enAire = false;
-                prohibidoSaltar = false;
-            }
-        }, 1);
+     // NUEVO --> cambiar estado del personaje
+    // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
+    function nave() {
+         estadoPersonaje = 'volando';
     }
 
     window.addEventListener('keydown', function(event) {
@@ -505,4 +584,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
         }
     })
+
+    function comprobarColisiones() {
+        // Zarzas
+        const zarzas = document.querySelectorAll('.zarzas');
+        const bloques = document.querySelectorAll('.bloque');
+        const bloquesTop = document.querySelectorAll('.bloqueTop');
+        const trampolines = document.querySelectorAll('.trampolin');
+        zarzas.forEach(zarza => {
+            if (colisionZarza(personaje, zarza)) {
+                personajeCaido();
+            }
+        });
+        bloques.forEach(bloque => {
+            if(colision(personaje, bloque)) {
+                personajeCaido();
+            }
+        })
+        bloquesTop.forEach(bloqueTop => {
+            if(colisionTopBloque(personaje, bloqueTop)){
+                console.log('Esta por encima nuestro')
+            }
+        })
+
+        if (colisionBaya(personaje, baya)) {
+            prohibidoSaltar = false;
+        }
+
+        trampolines.forEach(trampolin => {
+            if (colision(personaje, trampolin)) {
+                realizarSalto();
+            }
+        })
+    }
+
 })
+
+
+/**  ARREGLAR POSTERIORMENTE
+ * 
+ * Dos detalles que quiero que tengas en cuenta antes de probarlo
+En comprobarColisiones() debes evitar que los elementos ya eliminados se sigan comprobando. Además, sería conveniente comprobar que bandera y los demás elementos existen antes de acceder a ellos en actualizarObstaculos(). La implementación actual conserva algunas limitaciones de tu sistema de eliminación original.
+
+Tu getEstructuraStereoso() debería devolver una copia de los datos originales mediante .map(elemento => ({...elemento})), para que reiniciar el nivel no conserve las posiciones modificadas.
+ * 
+ * 
+ * 
+ * (??) Hay que tener especial cuidado con las colisiones del trampolín, que ahora pueden llamar a realizarSalto() en varios fotogramas consecutivos.
+ * 
+ */
