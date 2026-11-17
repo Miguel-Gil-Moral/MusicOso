@@ -236,3 +236,22 @@ body {
         right: calc(50% - 5px);
     }
 }
+
+/* Back button image only, larger */
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    padding: 0;
+    background: transparent; /* keep transparent background */
+    transition: transform 0.2s ease;
+}
+.back-button img {
+    width: 140px; /* larger icon */
+    height: auto;
+    display: block;
+}
+.back-button:hover {
+    transform: scale(1.1);
+}

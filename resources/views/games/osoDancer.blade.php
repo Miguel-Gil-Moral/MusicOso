@@ -4,6 +4,7 @@
 @section('title', 'Mapa')
 
 @section('content')
+    <a href="{{ route('welcome') }}" class="back-button"><img src="{{ Vite::asset('resources/assets/backButton.png') }}" alt="Volver"></a>
     <header id="header">
         <div id="cartel-container">
             <img src="{{ Vite::asset('resources/assets/osoDancer/cartel.svg') }}" id="cartel-img">
