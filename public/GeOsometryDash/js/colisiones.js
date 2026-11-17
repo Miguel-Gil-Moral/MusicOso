@@ -22,16 +22,28 @@ function colisionZarza(personaje, zarza) {
     );
 }
 
-// REVISAR USO
-function colisionTopBloque(personaje, bloque) {
+function colisionBloque(personaje, bloque) {
     const el1 = personaje.getBoundingClientRect();
     const el2 = bloque.getBoundingClientRect();
 
     return !(
+        el1.right < el2.left + 3.5 ||
+        el1.left > el2.right - 3.5 ||
+        el1.bottom < el2.top + (16 * 2) ||
+        el1.top > el2.bottom - (16 * 2)
+    )
+}
+
+// REVISAR USO
+function colisionTopBloque(personaje, bloqueTop) {
+    const el1 = personaje.getBoundingClientRect();
+    const el2 = bloqueTop.getBoundingClientRect();
+
+    return !(
         el1.right > el2.left ||
         el1.left < el2.right ||
-        el1.bottom >= el2.top - (16 * 2) ||
-        el1.top <= el2.bottom + (16 * 2)
+        el1.bottom >= el2.top ||
+        el1.bottom <= el2.top + 10
     )
 }
 
@@ -50,6 +62,7 @@ function colisionBaya(personaje, baya) {
 function comprobarColisiones() {
     // Zarzas
     const zarzas = document.querySelectorAll('.zarzas');
+    const bandera = document.querySelector('.bandera');
     zarzas.forEach(zarza => {
         if (colisionZarza(personaje, zarza)) {
             personajeCaido();
@@ -64,4 +77,7 @@ function comprobarColisiones() {
     // if (colision(personaje, trampolin)) {
     //     realizarSalto();
     // }
+    if(colision(personaje, bandera)) {
+        
+    }
 }

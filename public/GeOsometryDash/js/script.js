@@ -30,7 +30,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
    
-   const velocidad = 3.5; // Aplicar a los elementos que aparezcan lentos
+    const velocidad = 3.5; // Aplicar a los elementos que aparezcan lentos
     const contenedorJuego = document.getElementById('contenedorJuego');
     const boton = document.getElementById('botonJuego');
     const pantallaPausa = document.getElementById('pantallaPausa');
@@ -136,17 +136,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     imagen.src = '../GeOsometryDash/imagenes/Bandera.png';
                     break;
             }
-            // if (elemento.posicion <= 300) {
-                elemento.visible = true;
-                imagen.style.left = elemento.posicion + 'rem';
-                contenedorJuego.appendChild(imagen);
-            // } else {
-            //     elemento.visible = false;
-            // }
+            imagen.style.left = elemento.posicion + 'rem';
+            contenedorJuego.appendChild(imagen);
             temp.push(elemento);
-            if(elemento?.bloquesEncima && elemento.visible) {
+            if(elemento?.bloquesEncima) {
                 for (let i = 0; i < elemento.bloquesEncima; i++) {
-                    posicionBottom += 3.5;
+                    posicionBottom += 3.6;
                     const bloqueEncima = document.createElement('img');
                     bloqueEncima.classList.add('bloque');
                     bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
@@ -155,21 +150,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     contenedorJuego.appendChild(bloqueEncima);
                     temp.push({
                         nombre: bloqueEncima.classList[0],
-                        posicion: elemento.posicion,
-                        visible: elemento.visible
+                        posicion: elemento.posicion
                     });
                 }
             }
+            if(elemento?.zarzasEncima){
+                const zarzaEncima = document.createElement('img');
+                zarzaEncima.classList.add('zarzas');
+                zarzaEncima.src = '../GeOsometryDash/imagenes/Zarzas.png';
+                zarzaEncima.style.left = elemento.zarzasEncima + 'rem';
+                zarzaEncima.style.bottom = (posicionBottom + 3.6) + 'rem';
+                contenedorJuego.appendChild(zarzaEncima);
+                temp.push({
+                    nombre: zarzaEncima.classList[0],
+                    posicion: elemento.zarzasEncima
+                });
+            }
             if (elemento.nombre === 'bloque') {
-                if (elemento.visible) {
+                // if (elemento.visible) {
                     divTopBloque.style.left = elemento.posicion + 'rem';
                     divTopBloque.style.bottom = posicionBottom + 3.5 + 'rem';
                     contenedorJuego.appendChild(divTopBloque);
-                }
+                // }
                 temp.push({ 
                     nombre: divTopBloque.classList[0],
-                    posicion: elemento.posicion,
-                    visible: elemento.visible
+                    posicion: elemento.posicion
                 });
             }
         })
@@ -269,11 +274,11 @@ document.addEventListener('DOMContentLoaded', function() {
        
         /** VARIABLES NUEVAS */
 
-          muriendo = false;
-         tiempoMuerte = null;
+        muriendo = false;
+        tiempoMuerte = null;
         ultimoFrame = 0;
 
-         animationFrameId = requestAnimationFrame(bucleJuego);
+        animationFrameId = requestAnimationFrame(bucleJuego);
 
         function bucleJuego(tiempoActual) {
 
@@ -286,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let deltaTime = (tiempoActual - ultimoFrame) /  16.67;
        
             // Avoid enormous movements after a tab is inactive.
-             deltaTime = Math.min(deltaTime, 2);
+            deltaTime = Math.min(deltaTime, 2);
 
             ultimoFrame = tiempoActual;
 
@@ -297,11 +302,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     return; 
                 } 
             } else {
-                    actualizarFondo(deltaTime);
-                    actualizarObstaculos(deltaTime);
-                    actualizarObjetosEspeciales(deltaTime);
-                    actualizarPersonaje(deltaTime);
-                    comprobarColisiones();
+                actualizarFondo(deltaTime);
+                actualizarObstaculos(deltaTime);
+                actualizarObjetosEspeciales(deltaTime);
+                actualizarPersonaje(deltaTime);
+                comprobarColisiones();
             }
 
             // Solicitamos el siguiente fotograma
@@ -313,8 +318,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function actualizarFondo(deltaTime) {
 
         // Antes movías +0,01 por cada milisegundo. Ahora es lo mismo * 16 (cada FPS)
-        posicionFondo += 0.01 * deltaTime *  16.67;
-        posicionSuelo -= 0.5 * deltaTime * 7;
+        posicionFondo += 0.01 * deltaTime * 16;
+        posicionSuelo -= 0.5 * deltaTime * 5;
 
         contenedorJuego.style.backgroundPositionX =
             posicionFondo + '%';
@@ -336,29 +341,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
             estructuraNivel[i].posicion -= 0.2 * deltaTime * velocidad;
 
-            if (estructuraNivel[i].visible){
+            // if (estructuraNivel[i].visible){
                 switch (estructuraNivel[i].nombre) {
                     case 'zarzas':
                         zarzas[iteraciones[0]].style.left = estructuraNivel[i].posicion + 'rem';
-                        eliminarElemento(i, zarzas[iteraciones[0]]);
+                        // eliminarElemento(i, zarzas[iteraciones[0]]);
                         iteraciones[0]++;
                         break;
                     case 'bloque':
-                        bloques[iteraciones[1]].style.left =   estructuraNivel[i].posicion + 'rem';
-                        eliminarElemento(i, bloques[iteraciones[1]]);
+                        bloques[iteraciones[1]].style.left = estructuraNivel[i].posicion + 'rem';
+                        // eliminarElemento(i, bloques[iteraciones[1]]);
                         iteraciones[1]++;
                         break;
                     case 'bloqueTop':
                         topBloques[iteraciones[2]].style.left = estructuraNivel[i].posicion + 'rem';
-                        eliminarElemento(i, topBloques[iteraciones[2]]);
+                        // eliminarElemento(i, topBloques[iteraciones[2]]);
                         iteraciones[2]++;
                         break;
                     case 'bandera':
-                        bandera.style.left =estructuraNivel[i].posicion + 'rem';
+                        bandera.style.left = estructuraNivel[i].posicion + 'rem';
                         break;
                 }
 
-            }
+            // }
 
         }
     }
@@ -513,6 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function realizarSalto() {
         enAire = true;
+        sueloPersonaje = 5;
         
         if(!prohibidoSaltar) {
             limiteSalto = posicionPersonaje + 10;
@@ -597,13 +603,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         bloques.forEach(bloque => {
-            if(colision(personaje, bloque)) {
+            if(colisionBloque(personaje, bloque)) {
                 personajeCaido();
             }
         })
         bloquesTop.forEach(bloqueTop => {
-            if(colisionTopBloque(personaje, bloqueTop)){
-                console.log('Esta por encima nuestro')
+            if (colision(personaje, bloqueTop)){
+                sueloPersonaje = parseFloat(personaje.style.bottom);
             }
         })
 
