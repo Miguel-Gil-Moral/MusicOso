@@ -25,7 +25,7 @@
     /** FIN NUEVO */
 
     let posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
-    posicionPersonaje = 5, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
+    posicionPersonaje = 5, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
     limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,12 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const suelo = document.createElement('div');
     const personaje = document.createElement('img');
     const caja = document.createElement('img');
-    const espejo = document.createElement('img');
     const baya = document.createElement('img');
     const trampolin = document.createElement('img');
 
-    espejo.className = 'espejo';
-    espejo.src = '../GeOsometryDash/imagenes/Espejo.png';
     caja.className = 'caja';
     caja.src = '../GeOsometryDash/imagenes/Caja.png';
     baya.className = 'baya';
@@ -91,28 +88,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 divNiveles.style.display = 'none';
                 switch(nivel.dataset.nombre){
                     case 'StereOso Madness':
-                        audio = new Audio('../GeOsometryDash/audio/stereo_madness.mp3');
+                        establecerAudio('../GeOsometryDash/audio/stereo_madness.mp3');
                         estructuraNivel = getEstructuraStereoso();
                         break;
                     case 'Oso Can\'t Let Go':
-                        audio = new Audio('../GeOsometryDash/audio/cant_let_go.mp3');
+                        establecerAudio('../GeOsometryDash/audio/cant_let_go.mp3');
+                        estructuraNivel = getEstructuraCant();
                         break;
                     case 'UltraOso':
-                        audio = new Audio('../GeOsometryDash/audio/sonic_blaster.mp3');
+                        establecerAudio('../GeOsometryDash/audio/sonic_blaster.mp3');
                         estructuraNivel = getEstructuraUltraOso();
                         break;
                 }
-                if (nivel.dataset.nombre === 'StereOso Madness') {
-                    audio.volume = 0.05;
-                    audio.play();
-                    crearEstructura();
-                    comenzarJuego();
-                } else {
-                    comenzarJuego();
-                }
+                crearEstructura();
+                comenzarJuego();
             })
         })
     })
+
+    function establecerAudio(ruta) {
+        audio = new Audio(ruta);
+        audio.volume = 0.05;
+        audio.play();
+    }
 
     function crearEstructura() {
         let posicionBottom = 5;
@@ -132,11 +130,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     divTopBloque = document.createElement('div');
                     divTopBloque.classList.add('bloqueTop');
                     break;
+                case 'espejo':
+                    imagen.src = '../GeOsometryDash/imagenes/Espejo.png';
+                    break;
+                case 'baya':
+                    imagen.src = '../GeOsometryDash/imagenes/Baya.png';
+                    break;
+                case 'trampolin':
+                    imagen.src = '../GeOsometryDash/imagenes/Trampolin.png';
+                    break;
                 case 'bandera':
                     imagen.src = '../GeOsometryDash/imagenes/Bandera.png';
                     break;
             }
             imagen.style.left = elemento.posicion + 'rem';
+            imagen.style.bottom = elemento?.posicionBottom ? elemento.posicionBottom + 'rem': posicionBottom + 'rem';
             contenedorJuego.appendChild(imagen);
             temp.push(elemento);
             if(elemento?.bloquesEncima) {
@@ -154,37 +162,55 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
             }
-            if(elemento?.zarzasEncima){
-                const zarzaEncima = document.createElement('img');
-                zarzaEncima.classList.add('zarzas');
-                zarzaEncima.src = '../GeOsometryDash/imagenes/Zarzas.png';
-                zarzaEncima.style.left = elemento.zarzasEncima + 'rem';
-                zarzaEncima.style.bottom = (posicionBottom + 3.6) + 'rem';
-                contenedorJuego.appendChild(zarzaEncima);
-                temp.push({
-                    nombre: zarzaEncima.classList[0],
-                    posicion: elemento.zarzasEncima
-                });
-            }
             if (elemento.nombre === 'bloque') {
-                // if (elemento.visible) {
-                    divTopBloque.style.left = elemento.posicion + 'rem';
-                    divTopBloque.style.bottom = posicionBottom + 3.5 + 'rem';
-                    contenedorJuego.appendChild(divTopBloque);
-                // }
+                divTopBloque.style.left = elemento.posicion + 'rem';
+                divTopBloque.style.bottom = posicionBottom + 3.6 + 'rem';
+                contenedorJuego.appendChild(divTopBloque);
                 temp.push({ 
                     nombre: divTopBloque.classList[0],
                     posicion: elemento.posicion
                 });
             }
+            if(elemento?.elementoEncima){
+                const elementoNuevo = document.createElement('img');
+                elementoNuevo.classList.add(elemento.elementoEncima.nombre);
+                switch(elemento.elementoEncima.nombre){
+                    case 'zarzas':
+                        elementoNuevo.src = '../GeOsometryDash/imagenes/Zarzas.png';
+                        break;
+                    case 'espejo':
+                        elementoNuevo.src = '../GeOsometryDash/imagenes/Espejo.png';
+                        break;
+                }
+                elementoNuevo.style.left = elemento.zarzasEncima + 'rem';
+                elementoNuevo.style.bottom = (posicionBottom + 3.6) + 'rem';
+                contenedorJuego.appendChild(elementoNuevo);
+                temp.push({
+                    nombre: elementoNuevo.classList[0],
+                    posicion: elemento.elementoEncima.posicion
+                });
+            } else if (elemento?.elementoDebajo) {
+                const elementoNuevo = document.createElement('img');
+                elementoNuevo.classList.add(elemento.elementoEncima.nombre);
+                switch(elemento.elementoEncima.nombre){
+                    case 'zarzas':
+                        elementoNuevo.src = '../GeOsometryDash/imagenes/Zarzas.png';
+                        break;
+                    case 'espejo':
+                        elementoNuevo.src = '../GeOsometryDash/imagenes/Espejo.png';
+                        break;
+                }
+            }
         })
         estructuraNivel = temp;
+        console.log(estructuraNivel);
     }
 
     function quitarElementos() {
+        const zarzas = document.querySelectorAll('.zarzas');
         const bloques = document.querySelectorAll('.bloque');
         const topBloques = document.querySelectorAll('.bloqueTop');
-        const zarzas = document.querySelectorAll('.zarzas');
+        const espejos = document.querySelectorAll('.espejo');
         const bandera = document.querySelector('.bandera');
         contenedorJuego.removeChild(suelo);
         contenedorJuego.removeChild(personaje);
@@ -197,7 +223,9 @@ document.addEventListener('DOMContentLoaded', function() {
         topBloques.forEach(topBloque => {
             contenedorJuego.removeChild(topBloque);
         });
-        contenedorJuego.removeChild(espejo);
+        espejos.forEach(espejo => {
+            contenedorJuego.removeChild(espejo);
+        });
         contenedorJuego.removeChild(caja);
         contenedorJuego.removeChild(baya);
         contenedorJuego.removeChild(trampolin);
@@ -242,7 +270,6 @@ document.addEventListener('DOMContentLoaded', function() {
         pararIntervalos();
         contenedorJuego.appendChild(personaje);
         contenedorJuego.appendChild(baya);
-        contenedorJuego.appendChild(espejo);
         contenedorJuego.appendChild(caja);
         contenedorJuego.appendChild(trampolin);
         contenedorJuego.appendChild(pantallaPausa);
@@ -260,9 +287,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function pararIntervalos() {
         if (animationFrameId !== null) {
-                cancelAnimationFrame(animationFrameId);
-             animationFrameId = null;
-         }
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
 
         ultimoFrame = 0;
     }
@@ -306,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 actualizarObstaculos(deltaTime);
                 actualizarObjetosEspeciales(deltaTime);
                 actualizarPersonaje(deltaTime);
-                comprobarColisiones();
+                comprobarColisiones(personaje);
             }
 
             // Solicitamos el siguiente fotograma
@@ -330,11 +357,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function actualizarObstaculos(deltaTime) {
 
-        let iteraciones = [0, 0, 0];
+        let iteraciones = [0, 0, 0, 0]; //Zarzas, bloques, bloquesTop, espejo
 
         const bloques = document.querySelectorAll('.bloque');
         const topBloques = document.querySelectorAll('.bloqueTop');
         const zarzas = document.querySelectorAll('.zarzas');
+        const espejos = document.querySelectorAll('.espejo');
+        const bayas = document.querySelectorAll('.baya');
+        const trampolines = document.querySelectorAll('.trampolin');
         const bandera = document.querySelector('.bandera');
 
         for (let i = 0; i < estructuraNivel.length; i++) {
@@ -358,6 +388,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         // eliminarElemento(i, topBloques[iteraciones[2]]);
                         iteraciones[2]++;
                         break;
+                    case 'espejo':
+                        espejos[iteraciones[3]].style.left = estructuraNivel[i].posicion + 'rem';
+
+                        iteraciones[3]++;
+                        break;
+                    case 'baya':
+                        break;
+                    case 'trampolin':
+                        break;
                     case 'bandera':
                         bandera.style.left = estructuraNivel[i].posicion + 'rem';
                         break;
@@ -374,10 +413,6 @@ document.addEventListener('DOMContentLoaded', function() {
         posicionCaja -= 0.2 * deltaTime * velocidad;
         caja.style.left = posicionCaja + 'rem';
 
-        // Espejo
-        posicionEspejo -= 0.2 * deltaTime * velocidad;
-        espejo.style.left = posicionEspejo + 'rem';
-
         // Baya
         posicionBaya -= 0.2 * deltaTime * velocidad;
         baya.style.left = posicionBaya + 'rem';
@@ -385,162 +420,72 @@ document.addEventListener('DOMContentLoaded', function() {
         // Trampolín
         posicionTrampolin -= 0.2 * deltaTime * velocidad;
         trampolin.style.left = posicionTrampolin + 'rem';
-}
-
-// TOCAR LOS VALORES Y/O AÑADIR MULTIPLICADOR DE VELOCIDAD PARA AJUSTAR LA CURVA DE SALTO
-    function actualizarPersonaje(deltaTime) {
-        switch (estadoPersonaje) {
-            case 'saltando':
-                if (posicionPersonaje >= limiteCaidaLenta &&
-                    posicionPersonaje < limiteSalto) {
-                    posicionPersonaje += 0.07 * deltaTime * velocidad;
-                } else if (posicionPersonaje >= limiteCaidaMedia &&
-                    posicionPersonaje < limiteCaidaLenta) {
-                    posicionPersonaje += 0.17 * deltaTime * velocidad;
-                } else {
-                    posicionPersonaje += 0.27 * deltaTime * velocidad;
-                }
-                if (posicionPersonaje >= limiteSalto) {
-                    posicionPersonaje = limiteSalto;
-                    realizarCaida();
-                }
-                break;
-            case 'cayendo':
-                if (!cambioGravedad) {
-                    if (posicionPersonaje >= limiteCaidaLenta &&
-                        posicionPersonaje < limiteSalto) {
-                        posicionPersonaje -= 0.07 * deltaTime * velocidad;
-                    } else if (posicionPersonaje >= limiteCaidaMedia &&
-                        posicionPersonaje < limiteCaidaLenta) {
-                        posicionPersonaje -= 0.17 * deltaTime * velocidad;
-                    } else {
-                        posicionPersonaje -= 0.27 * deltaTime * velocidad;
-                    }
-                } else {
-                    limiteCaidaLenta = posicionPersonaje + 1;
-                    limiteCaidaMedia = posicionPersonaje + 2;
-                    if (posicionPersonaje >= limiteCaidaLenta) {
-                        posicionPersonaje += 0.07 * deltaTime * velocidad;
-
-                    } else if (posicionPersonaje >= limiteCaidaMedia) {
-                        posicionPersonaje += 0.17 * deltaTime * velocidad;
-
-                    } else {
-                        posicionPersonaje += 0.27 * deltaTime * velocidad;
-                    }
-                }
-                if (posicionPersonaje <= sueloPersonaje) {
-                    posicionPersonaje = sueloPersonaje;
-                    estadoPersonaje = 'quieto';
-                    enAire = false;
-                    prohibidoSaltar = false;
-                }
-                break;
-            case 'volando':
-                if (!cambioGravedad) {
-                    posicionPersonaje += 0.02 * deltaTime * velocidad;
-                }
-                break;
-        }
-        personaje.style.bottom = posicionPersonaje + 'rem';
     }
 
-
     function eliminarElemento(iteracionEstructura, elemento) {
-        if (estructuraNivel[iteracionEstructura].posicion <= -10 && estructuraNivel[iteracionEstructura].visible) {
+        if (estructuraNivel[iteracionEstructura].posicion <= -10 && estructuraNivel[iteracionEstructura]?.visible) {
             estructuraNivel[iteracionEstructura].visible = false;
             contenedorJuego.removeChild(elemento);
         }
     }
 
     /// REVISAR: NO SE USA (tampoco en el original)
-    function agregarElemento(iteracionEstructura) {
-        if (estructuraNivel[iteracionEstructura].posicion > -10 && 
-            estructuraNivel[iteracionEstructura].posicion <= 300 &&
-            !estructuraNivel[iteracionEstructura].visible
-        ) {
-            estructuraNivel[iteracionEstructura].visible = true;
-            let elemento;
-            if (estructuraNivel[iteracionEstructura].nombre != 'bloqueTop') {
-                elemento = document.createElement('img');
-                elemento.classList.add(estructuraNivel[iteracionEstructura].nombre);
-                switch(estructuraNivel[iteracionEstructura].nombre) {
-                    case 'zarzas':
-                        elemento.src = '../GeOsometryDash/imagenes/Zarzas.png';
-                        break;
-                    case 'bloque':
-                        elemento.src = '../GeOsometryDash/imagenes/Bloque.png';
-                        break;
-                    case 'bandera':
-                        elemento.src = '../GeOsometryDash/imagenes/Bandera.png';
-                        break;
-                }
-            } else {
-                elemento = document.createElement('div');
-            }
-            elemento.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
-            contenedorJuego.appendChild(elemento);
-            if (estructuraNivel[iteracionEstructura]?.bloquesEncima) {
-                let posicionBottom = 5;
-                for (let i = 0; i < estructuraNivel[iteracionEstructura].bloquesEncima; i++) {
-                    posicionBottom += 3.5;
-                    const bloqueEncima = document.createElement('img');
-                    bloqueEncima.classList.add('bloque');
-                    bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
-                    bloqueEncima.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
-                    bloqueEncima.style.bottom = posicionBottom + 'rem';
-                    contenedorJuego.appendChild(bloqueEncima);
-                }
-            }
-        }
-    }
-
-    function personajeCaido() {
-        if (muriendo) return;
-
-        audio.pause();
-
-        muriendo = true;
-        tiempoMuerte = performance.now();
-
-        estadoPersonaje = 'quieto';
-        enAire = false;
-    }
+    // function agregarElemento(iteracionEstructura) {
+    //     if (estructuraNivel[iteracionEstructura].posicion > -10 && 
+    //         estructuraNivel[iteracionEstructura].posicion <= 300 &&
+    //         !estructuraNivel[iteracionEstructura].visible
+    //     ) {
+    //         estructuraNivel[iteracionEstructura].visible = true;
+    //         let elemento;
+    //         if (estructuraNivel[iteracionEstructura].nombre != 'bloqueTop') {
+    //             elemento = document.createElement('img');
+    //             elemento.classList.add(estructuraNivel[iteracionEstructura].nombre);
+    //             switch(estructuraNivel[iteracionEstructura].nombre) {
+    //                 case 'zarzas':
+    //                     elemento.src = '../GeOsometryDash/imagenes/Zarzas.png';
+    //                     break;
+    //                 case 'bloque':
+    //                     elemento.src = '../GeOsometryDash/imagenes/Bloque.png';
+    //                     break;
+    //                 case 'bandera':
+    //                     elemento.src = '../GeOsometryDash/imagenes/Bandera.png';
+    //                     break;
+    //             }
+    //         } else {
+    //             elemento = document.createElement('div');
+    //         }
+    //         elemento.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
+    //         contenedorJuego.appendChild(elemento);
+    //         if (estructuraNivel[iteracionEstructura]?.bloquesEncima) {
+    //             let posicionBottom = 5;
+    //             for (let i = 0; i < estructuraNivel[iteracionEstructura].bloquesEncima; i++) {
+    //                 posicionBottom += 3.5;
+    //                 const bloqueEncima = document.createElement('img');
+    //                 bloqueEncima.classList.add('bloque');
+    //                 bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
+    //                 bloqueEncima.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
+    //                 bloqueEncima.style.bottom = posicionBottom + 'rem';
+    //                 contenedorJuego.appendChild(bloqueEncima);
+    //             }
+    //         }
+    //     }
+    // }
 
     function reiniciarJuego() {
+        const encabezadoPausa = document.getElementById('encabezadoPausa');
         quitarElementos();
-        estructuraNivel = getEstructuraStereoso();
+        if (encabezadoPausa.textContent == 'StereOso Madness') {
+            estructuraNivel = getEstructuraStereoso();
+        } else if (encabezadoPausa.textContent == 'Oso Can\' Let Go'){
+            estructuraNivel = getEstructuraCant();
+        } else {
+            estructuraNivel = getEstructuraUltraOso();
+        }
         crearEstructura();
         comenzarJuego();
     }
 
-  
-
-    function realizarSalto() {
-        enAire = true;
-        sueloPersonaje = 5;
-        
-        if(!prohibidoSaltar) {
-            limiteSalto = posicionPersonaje + 10;
-            limiteCaidaLenta = limiteSalto - 1;
-            limiteCaidaMedia = limiteSalto - 2;
-            prohibidoSaltar = true;
-            
-            // NUEVO --> cambiar estado del personaje
-            // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
-            estadoPersonaje = "saltando";
-            
-        }
-
-    }
-
-     // NUEVO --> cambiar estado del personaje
-            // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
-    function realizarCaida() {
-       estadoPersonaje = 'cayendo';
-    }
-
-     // NUEVO --> cambiar estado del personaje
+    // NUEVO --> cambiar estado del personaje
     // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
     function nave() {
          estadoPersonaje = 'volando';
@@ -590,39 +535,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
         }
     })
-
-    function comprobarColisiones() {
-        // Zarzas
-        const zarzas = document.querySelectorAll('.zarzas');
-        const bloques = document.querySelectorAll('.bloque');
-        const bloquesTop = document.querySelectorAll('.bloqueTop');
-        const trampolines = document.querySelectorAll('.trampolin');
-        zarzas.forEach(zarza => {
-            if (colisionZarza(personaje, zarza)) {
-                personajeCaido();
-            }
-        });
-        bloques.forEach(bloque => {
-            if(colisionBloque(personaje, bloque)) {
-                personajeCaido();
-            }
-        })
-        bloquesTop.forEach(bloqueTop => {
-            if (colision(personaje, bloqueTop)){
-                sueloPersonaje = parseFloat(personaje.style.bottom);
-            }
-        })
-
-        if (colisionBaya(personaje, baya)) {
-            prohibidoSaltar = false;
-        }
-
-        trampolines.forEach(trampolin => {
-            if (colision(personaje, trampolin)) {
-                realizarSalto();
-            }
-        })
-    }
 
 })
 

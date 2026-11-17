@@ -59,15 +59,43 @@ function colisionBaya(personaje, baya) {
     )
 }
 
-function comprobarColisiones() {
+function comprobarColisiones(personaje) {
     // Zarzas
     const zarzas = document.querySelectorAll('.zarzas');
+    const bloques = document.querySelectorAll('.bloque');
+    const bloquesTop = document.querySelectorAll('.bloqueTop');
+    const espejos = document.querySelectorAll('.espejo');
+    const trampolines = document.querySelectorAll('.trampolin');
     const bandera = document.querySelector('.bandera');
     zarzas.forEach(zarza => {
         if (colisionZarza(personaje, zarza)) {
             personajeCaido();
         }
     });
+    bloques.forEach(bloque => {
+        if(colisionBloque(personaje, bloque)) {
+            personajeCaido();
+        }
+    })
+    bloquesTop.forEach(bloqueTop => {
+        if (colision(personaje, bloqueTop)){
+            sueloPersonaje = parseFloat(personaje.style.bottom);
+        }
+    })
+    espejos.forEach(espejo => {
+        if(colision(personaje, espejo)){
+        }
+    })
+
+    // if (colisionBaya(personaje, baya)) {
+    //     prohibidoSaltar = false;
+    // }
+
+    trampolines.forEach(trampolin => {
+        if (colision(personaje, trampolin)) {
+            realizarSalto();
+        }
+    })
     // // Baya
     // if (colision(personaje, baya)) {
     //     prohibidoSaltar = false;
