@@ -1,4 +1,3 @@
-import gameMusicSource from '../../../src/Canción de Pou (1 hora) [zHXauqz3ixM].mp3';
 import blancaBlueImage from '../../../src/blanca(Azul).png';
 import blancaYellowImage from '../../../src/blanca(Amarillo).png';
 import blancaGreenImage from '../../../src/blanca(Verde).png';
@@ -30,9 +29,9 @@ const notesByKey = {
     j: { note: 'G', control: '7' }
 };
 
-const quarterNoteDuration = 1000;
+const quarterNoteDuration = 500;
 const gameSpeed = 1;
-const noteTravelDuration = 7500;
+const noteTravelDuration = 2500;
 const noteHitWindowMs = 750;
 const perfectWindowMs = 150;
 const pixelPerfectWindowMs = 30;
@@ -77,6 +76,7 @@ const rhythmTypes = [
     }
 ];
 const activeNotes = new Set();
+const noteMetrics = [];
 const noteTypes = Object.values(notesByKey);
 const gameMusic = document.getElementById('musica-joc');
 const levelMarker = document.getElementById('marcador-nivel');
@@ -89,13 +89,19 @@ let level = 50;
 let combo = 0;
 let konamiProgress = 0;
 let autoHitEnabled = false;
+let superPerfectComboTimeout = null;
 const missTimeouts = new Map();
 const autoHitTimeouts = new Map();
 
-gameMusic.src = gameMusicSource;
+window.noteMetrics = noteMetrics;
+
 pentagram.style.setProperty('--quarter-note-duration', `${quarterNoteDuration}ms`);
 
 function startGameMusic() {
+    if (!gameMusic.src) {
+        return;
+    }
+
     gameMusic.play().catch(() => {
         document.addEventListener('keydown', () => {
             gameMusic.play();
@@ -156,6 +162,9 @@ levelMarker.style.setProperty('--nivel', '50%');
 
 function updateCombo() {
     comboElement.textContent = `Combo: ${combo}`;
+    comboElement.classList.remove('combo-super-perfecto');
+    clearTimeout(superPerfectComboTimeout);
+    superPerfectComboTimeout = null;
 }
 
 function shakeCombo() {
@@ -186,18 +195,41 @@ function getTimingFeedback(noteImage) {
     const timingDifference = elapsedTime - Number(noteImage.dataset.hitTime);
 
     if (timingDifference < -perfectWindowMs) {
-        return { text: 'Pronto', type: 'pronto' };
+        return { text: 'Pronto', type: 'pronto', timingDifference };
     }
 
     if (Math.abs(timingDifference) <= pixelPerfectWindowMs) {
-        return { text: 'SUPER PERFECT', type: 'super-perfecto', isPerfect: true };
+        return {
+            text: 'SUPER PERFECT',
+            type: 'super-perfecto',
+            isPerfect: true,
+            timingDifference
+        };
     }
 
     if (timingDifference <= perfectWindowMs) {
-        return { text: 'Perfecto', type: 'perfecto', isPerfect: true };
+        return { text: 'Perfecto', type: 'perfecto', isPerfect: true, timingDifference };
     }
 
-    return { text: 'Tarde', type: 'tarde' };
+    return { text: 'Tarde', type: 'tarde', timingDifference };
+}
+
+function getAccuracyPercentage(timingDifference) {
+    return Math.max(0, Math.min(100, 100 * (1 - (Math.abs(timingDifference) / noteHitWindowMs))));
+}
+
+function registerNoteMetric(noteImage, timingFeedback) {
+    const timingDifference = timingFeedback.timingDifference ?? 0;
+    const metric = {
+        note: noteImage.dataset.key,
+        timing: timingFeedback.type,
+        accuracyPercentage: Number(getAccuracyPercentage(timingDifference).toFixed(2)),
+        timingDifferenceMs: Math.round(timingDifference),
+        registeredAt: new Date().toISOString()
+    };
+
+    noteMetrics.push(metric);
+    console.log(`[GuitarherOso] Precisión de nota: ${metric.accuracyPercentage}%`, metric);
 }
 
 function showHackMessage() {
@@ -222,6 +254,7 @@ function scheduleAutoHit(noteImage) {
             registerSuccessfulHit(noteImage, {
                 text: 'SUPER PERFECT',
                 type: 'super-perfecto',
+                timingDifference: 0,
                 isPerfect: true
             });
         }
@@ -331,12 +364,20 @@ function registerSuccessfulHit(noteImage, timingFeedback) {
     clearTimeout(autoHitTimeouts.get(noteImage));
     autoHitTimeouts.delete(noteImage);
     activeNotes.delete(noteImage);
+    registerNoteMetric(noteImage, timingFeedback);
     updateLevel(levelStep);
     combo += 1;
     updateCombo();
 
     if (timingFeedback.isPerfect) {
         shakeCombo();
+    }
+    if (timingFeedback.type === 'super-perfecto') {
+        comboElement.classList.add('combo-super-perfecto');
+        superPerfectComboTimeout = setTimeout(() => {
+            comboElement.classList.remove('combo-super-perfecto');
+            superPerfectComboTimeout = null;
+        }, 900);
     }
 
     noteImage.style.animationPlayState = 'paused';

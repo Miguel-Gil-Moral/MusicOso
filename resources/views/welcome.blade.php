@@ -14,8 +14,15 @@
 
     <div class="welcome-background">
 
-        @for ($i = 1; $i <= 9; $i++)
+        @for ($i = 1; $i <= 6; $i++)
         <a href="{{ route('games.osoDancer') }}"
+           class="boton-nivel nivel-{{ $i }}"
+           aria-label="Jugar nivel {{ $i }}">
+        </a>
+        @endfor
+
+        @for ($i = 7; $i <= 9; $i++)
+        <a href="{{ route('games.GuitarherOso') }}"
            class="boton-nivel nivel-{{ $i }}"
            aria-label="Jugar nivel {{ $i }}">
         </a>
