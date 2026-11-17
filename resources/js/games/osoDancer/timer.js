@@ -2,6 +2,7 @@ import { perderVida } from "./vidas.js";
 import { actualizarEnemigo } from "./enemigos.js";
 import { estado } from "./estado.js";
 import { createMap, enemigosNivel, matriz } from "./mapa.js";
+import barraImg from "../../../assets/osoDancer/barra.svg";
 
 const duracionTick = 500;
 const duracionJugador = duracionTick * 2;

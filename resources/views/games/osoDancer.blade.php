@@ -25,10 +25,13 @@
         <div id="map"></div>
     </main>
 
-    <div class="timer-bar">
-        <div class="objetivo"></div>
-        <div class="izquierda"></div>
-        <div class="derecha"></div>
+    <div class="timer-bar-container">
+        <img src="{{ Vite::asset('resources/assets/osoDancer/barra.svg') }}" id="timer-bar-img" alt="Barra de ritmo">
+        <div class="timer-bar">
+            <div class="objetivo"></div>
+            <div class="izquierda"></div>
+            <div class="derecha"></div>
+        </div>
     </div>
 @endsection
 
