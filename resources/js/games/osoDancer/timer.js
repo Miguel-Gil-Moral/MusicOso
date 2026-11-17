@@ -1,27 +1,80 @@
 import { perderVida } from "./vidas.js";
+import { actualizarEnemigo } from "./enemigos.js";
+import { estado } from "./estado.js";
+import { createMap, enemigosNivel, matriz } from "./mapa.js";
+import barraImg from "../../../assets/osoDancer/barra.svg";
 
-const duracion = 1000;
+const duracionTick = 500;
+const duracionJugador = duracionTick * 2;
 const margen = 100;
+
+let tick = 0;
 let inicio = performance.now();
 
-export function reiniciarAnimacion() {
+const mensaje = document.getElementById("mensaje");
+const barraIzquierda = document.querySelector(".izquierda");
+const barraDerecha = document.querySelector(".derecha");
+
+document.documentElement.style.setProperty("--duracion", `${duracionJugador}ms`);
+
+
+// RELOJ GLOBAL
+function gameTick() {
+    tick++;
+
+    for (const enemigo of enemigosNivel) {
+        if (tick % enemigo.velocidad === 0) {
+            actualizarEnemigo(
+                enemigo,
+                estado.playerX,
+                estado.playerY,
+                matriz,
+                enemigosNivel
+            );
+        }
+    }
+
+    createMap();
+
+    if (tick % 2 === 0) {
+        reiniciarBarra();
+    }
+}
+setInterval(gameTick, duracionTick);
+
+
+// ANIMACIÓN DE LA BARRA
+function reiniciarBarra() {
+    barraIzquierda.style.animation = "none";
+    barraDerecha.style.animation = "none";
+
+    void barraIzquierda.offsetWidth;
+
+    barraIzquierda.style.animation = "";
+    barraDerecha.style.animation = "";
+}
+
+reiniciarBarra();
+
+
+// COMPROBAR PRECISIÓN DEL JUGADOR
+export function comprobarTiming() {
     const tiempo = performance.now() - inicio;
+    const turno = Math.max(1, Math.round(tiempo / duracionJugador));
 
-    let porcentajeAcierto = Math.max(0, 100 - (Math.abs(tiempo - duracion) / margen) * 100);
+    const precision = Math.max(0, 100 - (Math.abs(tiempo - turno * duracionJugador) / margen) * 100
+    );
 
-    document.documentElement.style.setProperty("--duracion", duracion + "ms");
-    const mensaje = document.getElementById("mensaje");
-
-    if (porcentajeAcierto >= 95) {
+    if (precision >= 95) {
         mensaje.style.color = "#60a5fa";
         mensaje.textContent = "PERFECTO";
-    } else if (porcentajeAcierto >= 80) {
+    } else if (precision >= 80) {
         mensaje.style.color = "#4ade80";
         mensaje.textContent = "BIEN";
-    } else if (porcentajeAcierto >= 50) {
+    } else if (precision >= 50) {
         mensaje.style.color = "#facc15";
         mensaje.textContent = "OK";
-    } else if (porcentajeAcierto < 50 && porcentajeAcierto > 0) {
+    } else if (precision > 0) {
         mensaje.style.color = "#fb923c";
         mensaje.textContent = "AJUSTADO";
     } else {
@@ -30,16 +83,11 @@ export function reiniciarAnimacion() {
         perderVida();
     }
 
-    console.log(mensaje.textContent + " | " + porcentajeAcierto.toFixed(2) + "%" + " | " + tiempo.toFixed(2) + "ms");
+    console.log(
+        mensaje.textContent +
+        " | Precisión: " +
+        precision.toFixed(2) + "%"
+    );
 
-    const izquierda = document.querySelector(".izquierda");
-    const derecha = document.querySelector(".derecha");
-    izquierda.style.animation = "none";
-    derecha.style.animation = "none";
-    izquierda.offsetWidth;
-    izquierda.style.animation = "";
-    derecha.style.animation = "";
-
-    inicio = performance.now();
-    return porcentajeAcierto;
+    return precision;
 }

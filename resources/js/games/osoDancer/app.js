@@ -1,6 +1,6 @@
 import { estado } from "./estado.js";
 import { createMap, matriz } from "./mapa.js";
-import { reiniciarAnimacion } from "./timer.js";
+import { comprobarTiming } from "./timer.js";
 
 let pasos = 0;
 let mediaPrecision = 0;
@@ -28,7 +28,7 @@ document.addEventListener("keydown", (event) => {
 
     event.preventDefault();
 
-    let precision = reiniciarAnimacion();
+    let precision = comprobarTiming();
 
     if (precision === 0) {
         return;

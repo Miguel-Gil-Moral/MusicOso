@@ -1,34 +1,20 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'Selección de niveles')
 
-    <title>Selección de niveles</title>
-
-    @vite('resources/css/welcome.css')
-</head>
-
-<body class="welcome-page">
-
-    <div class="welcome-background">
-
-        @for ($i = 1; $i <= 6; $i++)
+@section('content')
+@vite('resources/css/welcome.css')
+<div class="welcome-background">
+    @for ($i = 1; $i <= 6; $i++)
         <a href="{{ route('games.osoDancer') }}"
            class="boton-nivel nivel-{{ $i }}"
-           aria-label="Jugar nivel {{ $i }}">
-        </a>
-        @endfor
+           aria-label="Jugar nivel {{ $i }}"></a>
+    @endfor
 
-        @for ($i = 7; $i <= 9; $i++)
+    @for ($i = 7; $i <= 9; $i++)
         <a href="{{ route('games.GuitarherOso') }}"
            class="boton-nivel nivel-{{ $i }}"
-           aria-label="Jugar nivel {{ $i }}">
-        </a>
-        @endfor
-
-    </div>
-
-</body>
-</html>
+           aria-label="Jugar nivel {{ $i }}"></a>
+    @endfor
+</div>
+@endsection
