@@ -5,6 +5,7 @@
 }
 
 body {
+    position: relative;
     overflow: hidden;
     display: grid;
     min-height: 100vh;
@@ -12,11 +13,77 @@ body {
     background: url("../../assets/osoDancer/fondoCielo.svg") center center / cover no-repeat fixed;
 }
 
+#header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+}
+
+#cartel-container {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    margin-bottom: -25px;
+}
+#cartel-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform: scaleX(1.4);
+}
+
+#cartel-texto {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 82%;
+    text-align: center;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    line-height: 1.4;
+
+}
+
+#titulo {
+    font-size: 2 rem;
+    font-weight: 900;
+    color: #2b1404;
+
+}
+
+#vidas-texto {
+    display: none;
+}
+
 #game {
     width: 60vw;
     height: 30vw;
 }
 
+#vidas {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 20;
+}
+
+.vida {
+    width: 65px;
+    height: 65px;
+}
 #map {
     display: grid;
     grid-template: repeat(11, 1fr) / repeat(22, 1fr);
@@ -25,6 +92,7 @@ body {
 }
 
 .cell {
+    position: relative;
     display: grid;
     place-items: center;
 }
@@ -76,36 +144,69 @@ body {
     background-color: yellow;
 }
 
+
+.enemy {
+    position: absolute;
+    inset: 10%;
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
 .exit {
     background-color: green;
 }
 
-.timer-bar {
+.timer-bar-container {
     position: relative;
-    width: min(950px, 90vw);
-    height: 108px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: min(750px, 90vw);
+    user-select: none;
+}
+
+#timer-bar-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.timer-bar {
+    position: absolute;
+    top: 39%;
+    height: 24%;
+    left: 8%;
+    right: 8%;
     overflow: hidden;
-    border: 7px solid #000;
-    background-color: #f1f1f1;
+    pointer-events: none;
 }
 
 .objetivo {
     position: absolute;
-    top: 3px;
-    bottom: 3px;
+    top: 0;
+    bottom: 0;
     left: 50%;
-    width: 34px;
+    width: 24px;
     transform: translateX(-50%);
-    background-color: #888;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(250, 204, 21, 0.7);
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.4);
 }
 
 .izquierda, .derecha {
     position: absolute;
-    top: 9px;
-    width: 12px;
-    height: 74px;
-    z-index: 1;
-    background-color: #000;
+    top: 5%;
+    bottom: 5%;
+    width: 10px;
+    z-index: 2;
+    background-color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 2px #000;
 }
 
 .izquierda {
@@ -123,7 +224,7 @@ body {
         left: 0;
     }
     to {
-        left: calc(50% - 6px);
+        left: calc(50% - 5px);
     }
 }
 
@@ -132,6 +233,25 @@ body {
         right: 0;
     }
     to {
-        right: calc(50% - 6px);
+        right: calc(50% - 5px);
     }
+}
+
+/* Back button image only, larger */
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    padding: 0;
+    background: transparent; /* keep transparent background */
+    transition: transform 0.2s ease;
+}
+.back-button img {
+    width: 140px; /* larger icon */
+    height: auto;
+    display: block;
+}
+.back-button:hover {
+    transform: scale(1.1);
 }

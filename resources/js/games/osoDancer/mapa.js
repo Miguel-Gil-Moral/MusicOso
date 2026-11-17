@@ -1,4 +1,5 @@
 import { estado } from "./estado.js";
+import { crearEnemigo } from "./enemigos.js";
 
 export const matriz = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -12,6 +13,11 @@ export const matriz = [
     [1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
+
+export let enemigosNivel = [
+    crearEnemigo("blanca", 5, 3),
+    crearEnemigo("negra", 8, 7)
 ];
 
 const map = document.getElementById("map");
@@ -45,7 +51,15 @@ export function createMap() {
                 player.classList.add("player");
                 cell.appendChild(player);
             }
-
+                for (const enemigo of enemigosNivel) {
+                    if (enemigo.x === x && enemigo.y === y) {
+                        const imagen = document.createElement("img");
+                        imagen.src = enemigo.asset;
+                        imagen.alt = enemigo.nombre;
+                        imagen.classList.add("enemy");
+                        cell.appendChild(imagen);
+                    }
+                }
             map.appendChild(cell);
         }
     }
