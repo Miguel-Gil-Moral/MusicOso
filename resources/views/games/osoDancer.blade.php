@@ -4,7 +4,14 @@
 @section('title', 'Mapa')
 
 @section('content')
-    <header id="header"></header>
+    <header id="header">
+        <div id="cartel-container">
+            <img src="{{ Vite::asset('resources/assets/osoDancer/cartel.svg') }}" id="cartel-img">
+            <div id="cartel-texto">
+                <h1 id="titulo">Oso <br> Dancer</h1>
+            </div>
+        </div>
+    </header>
     <p id="mensaje"></p>
 
     <div id="vidas">
