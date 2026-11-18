@@ -25,7 +25,7 @@
     /** FIN NUEVO */
 
     let posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
-    posicionPersonaje = 5, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
+    posicionPersonaje = 5, posicionTrampolin = 225;
     limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -42,14 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const suelo = document.createElement('div');
     const personaje = document.createElement('img');
-    const caja = document.createElement('img');
-    const baya = document.createElement('img');
     const trampolin = document.createElement('img');
 
-    caja.className = 'caja';
-    caja.src = '../GeOsometryDash/imagenes/Caja.png';
-    baya.className = 'baya';
-    baya.src = '../GeOsometryDash/imagenes/Baya.png';
     trampolin.className = 'trampolin';
     trampolin.src = '../GeOsometryDash/imagenes/Trampolin.png';
 
@@ -114,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function crearEstructura() {
         let posicionBottom = 5;
-        let divTopBloque;
+        let divTopBloque, divBottomBloque;
         let temp = [];
         contenedorJuego.appendChild(suelo);
         estructuraNivel.forEach(elemento => {
@@ -162,14 +156,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
             }
-            if (elemento.nombre === 'bloque') {
+            if (elemento.nombre === 'bloque' && !elemento?.posicionBottom) {
                 divTopBloque.style.left = elemento.posicion + 'rem';
-                divTopBloque.style.bottom = posicionBottom + 3.6 + 'rem';
+                divTopBloque.style.bottom = elemento?.posicionBottom ? elemento.posicionBottom + 3.6 + 'rem' : posicionBottom + 3.6 + 'rem';
                 contenedorJuego.appendChild(divTopBloque);
                 temp.push({ 
                     nombre: divTopBloque.classList[0],
                     posicion: elemento.posicion
                 });
+            } else if (elemento.nombre === 'bloque' && elemento?.posicionBottom) {
+                divBottomBloque = document.createElement('div');
+                divBottomBloque.classList.add('bloqueBottom');
+                divBottomBloque.style.left = elemento.posicion + 'rem';
+                divBottomBloque.style.bottom = elemento.posicionBottom + 'rem';
+                contenedorJuego.appendChild(divBottomBloque);
+                temp.push({
+                    nombre: divBottomBloque.classList[0],
+                    posicion: elemento.posicion
+                })
             }
             if(elemento?.elementoEncima){
                 const elementoNuevo = document.createElement('img');
@@ -191,8 +195,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             } else if (elemento?.elementoDebajo) {
                 const elementoNuevo = document.createElement('img');
-                elementoNuevo.classList.add(elemento.elementoEncima.nombre);
-                switch(elemento.elementoEncima.nombre){
+                elementoNuevo.classList.add(elemento.elementoDebajo.nombre);
+                switch(elemento.elementoDebajo.nombre){
                     case 'zarzas':
                         elementoNuevo.src = '../GeOsometryDash/imagenes/Zarzas.png';
                         break;
@@ -200,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         elementoNuevo.src = '../GeOsometryDash/imagenes/Espejo.png';
                         break;
                 }
+                elementoNuevo.style.left = elemento.elementoDebajo.posicion + 'rem';
             }
         })
         estructuraNivel = temp;
@@ -210,7 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const zarzas = document.querySelectorAll('.zarzas');
         const bloques = document.querySelectorAll('.bloque');
         const topBloques = document.querySelectorAll('.bloqueTop');
+        const bottomBloques = document.querySelectorAll('.bloqueBottom');
         const espejos = document.querySelectorAll('.espejo');
+        const bayas = document.querySelectorAll('.baya');
+        const trampolines = document.querySelectorAll('.trampolin');
         const bandera = document.querySelector('.bandera');
         contenedorJuego.removeChild(suelo);
         contenedorJuego.removeChild(personaje);
@@ -223,12 +231,18 @@ document.addEventListener('DOMContentLoaded', function() {
         topBloques.forEach(topBloque => {
             contenedorJuego.removeChild(topBloque);
         });
+        bottomBloques.forEach(bottomBloque => {
+            contenedorJuego.removeChild(bottomBloque);
+        })
         espejos.forEach(espejo => {
             contenedorJuego.removeChild(espejo);
         });
-        contenedorJuego.removeChild(caja);
-        contenedorJuego.removeChild(baya);
-        contenedorJuego.removeChild(trampolin);
+        bayas.forEach(baya => {
+            contenedorJuego.removeChild(baya);
+        })
+        trampolines.forEach(trampolin => {
+            contenedorJuego.removeChild(trampolin);
+        })
         contenedorJuego.removeChild(bandera);
     }
 
@@ -260,8 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.currentTime = 0;
         audio.play();
         modoActual = 'Cubo';
-        posicionFondo = 0.00, posicionSuelo = 0.00;
-        posicionPersonaje = 5, posicionEspejo = 450, posicionCaja = 250, posicionBaya = 200, posicionTrampolin = 225;
+        posicionFondo = 0.00, posicionSuelo = 0.00, posicionPersonaje = 5, posicionTrampolin = 225;
         limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
         cambioGravedad = false;
         enAire = false;
@@ -269,8 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         pararIntervalos();
         contenedorJuego.appendChild(personaje);
-        contenedorJuego.appendChild(baya);
-        contenedorJuego.appendChild(caja);
         contenedorJuego.appendChild(trampolin);
         contenedorJuego.appendChild(pantallaPausa);
 
@@ -357,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function actualizarObstaculos(deltaTime) {
 
-        let iteraciones = [0, 0, 0, 0]; //Zarzas, bloques, bloquesTop, espejo
+        let iteraciones = [0, 0, 0, 0, 0, 0, 0]; //Zarzas, bloques, bloquesTop, espejo, letrero, baya, trampolin
 
         const bloques = document.querySelectorAll('.bloque');
         const topBloques = document.querySelectorAll('.bloqueTop');
@@ -393,6 +404,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         iteraciones[3]++;
                         break;
+                    case 'letrero':
+                        break;
                     case 'baya':
                         break;
                     case 'trampolin':
@@ -408,23 +421,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function actualizarObjetosEspeciales(deltaTime) {
-
-        // Caja
-        posicionCaja -= 0.2 * deltaTime * velocidad;
-        caja.style.left = posicionCaja + 'rem';
-
-        // Baya
-        posicionBaya -= 0.2 * deltaTime * velocidad;
-        baya.style.left = posicionBaya + 'rem';
-
         // Trampolín
         posicionTrampolin -= 0.2 * deltaTime * velocidad;
         trampolin.style.left = posicionTrampolin + 'rem';
     }
 
     function eliminarElemento(iteracionEstructura, elemento) {
-        if (estructuraNivel[iteracionEstructura].posicion <= -10 && estructuraNivel[iteracionEstructura]?.visible) {
-            estructuraNivel[iteracionEstructura].visible = false;
+        if (estructuraNivel[iteracionEstructura].posicion <= -10) {
+            estructuraNivel[iteracionEstructura].eliminado = true;
             contenedorJuego.removeChild(elemento);
         }
     }
@@ -474,6 +478,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function reiniciarJuego() {
         const encabezadoPausa = document.getElementById('encabezadoPausa');
         quitarElementos();
+        console.log(estructuraNivel);
         if (encabezadoPausa.textContent == 'StereOso Madness') {
             estructuraNivel = getEstructuraStereoso();
         } else if (encabezadoPausa.textContent == 'Oso Can\' Let Go'){
@@ -481,6 +486,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             estructuraNivel = getEstructuraUltraOso();
         }
+        console.log(estructuraNivel);
         crearEstructura();
         comenzarJuego();
     }
