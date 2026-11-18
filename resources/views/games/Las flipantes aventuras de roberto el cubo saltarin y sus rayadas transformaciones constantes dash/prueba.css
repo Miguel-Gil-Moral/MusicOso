@@ -1,0 +1,21 @@
+body {
+    display: flex;
+    position: relative;
+    height: 100vh;
+}
+
+#bloque1 {
+    position: absolute;
+    background-color: blue;
+    height: 25vh;
+    width: 25vh;
+}
+
+#bloque2 {
+    position: absolute;
+    background-color: brown;
+    height: 25vh;
+    width: 25vh;
+    left: 50rem;
+    bottom: 5rem;
+}
