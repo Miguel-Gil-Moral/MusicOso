@@ -16,11 +16,10 @@
     <p id="mensaje"></p>
 
     <div id="vidas">
-<img src="{{ Vite::asset('resources/assets/osoDancer/corazonEntero.png') }}" alt="Vida" class="vida" height="70vw">
-<img src="{{ Vite::asset('resources/assets/osoDancer/corazonEntero.png') }}" alt="Vida" class="vida" height="70vw">
-<img src="{{ Vite::asset('resources/assets/osoDancer/corazonEntero.png') }}" alt="Vida" class="vida" height="70vw">
-
-</div>
+        <img src="{{ Vite::asset('resources/assets/osoDancer/corazonEntero.png') }}" alt="Vida" class="vida">
+        <img src="{{ Vite::asset('resources/assets/osoDancer/corazonEntero.png') }}" alt="Vida" class="vida">
+        <img src="{{ Vite::asset('resources/assets/osoDancer/corazonEntero.png') }}" alt="Vida" class="vida">
+    </div>
 
     <main id="game">
         <div id="map"></div>
