@@ -1,4 +1,4 @@
-    let estructuraNivel = [], audio;
+    let estructuraNivel = [], copiaSeguridad = [], audio;
 
     /** NUEVO **/
 
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function establecerAudio(ruta) {
         audio = new Audio(ruta);
-        audio.volume = 0.05;
+        audio.volume = 0.1;
         audio.play();
     }
 
@@ -478,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function reiniciarJuego() {
         const encabezadoPausa = document.getElementById('encabezadoPausa');
         quitarElementos();
-        console.log(estructuraNivel);
         if (encabezadoPausa.textContent == 'StereOso Madness') {
             estructuraNivel = getEstructuraStereoso();
         } else if (encabezadoPausa.textContent == 'Oso Can\' Let Go'){
@@ -486,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             estructuraNivel = getEstructuraUltraOso();
         }
-        console.log(estructuraNivel);
+        estructuraNivel = copiaSeguridad;
         crearEstructura();
         comenzarJuego();
     }

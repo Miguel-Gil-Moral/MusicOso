@@ -93,3 +93,11 @@ function personajeCaido() {
     estadoPersonaje = 'quieto';
     enAire = false;
 }
+
+function espejoGravedad() {
+    if(cambioGravedad) {
+        cambioGravedad = false;
+    } else {
+        cambioGravedad = true;
+    }
+}

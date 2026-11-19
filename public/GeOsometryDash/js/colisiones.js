@@ -84,6 +84,7 @@ function comprobarColisiones(personaje) {
     })
     espejos.forEach(espejo => {
         if(colision(personaje, espejo)){
+            espejoGravedad();
         }
     })
 
