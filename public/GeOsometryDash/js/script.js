@@ -24,8 +24,7 @@
 
     /** FIN NUEVO */
 
-    let posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5,
-    posicionPersonaje = 5, posicionTrampolin = 225;
+    let posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5, posicionPersonaje = 5;
     limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -42,10 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const suelo = document.createElement('div');
     const personaje = document.createElement('img');
-    const trampolin = document.createElement('img');
-
-    trampolin.className = 'trampolin';
-    trampolin.src = '../GeOsometryDash/imagenes/Trampolin.png';
 
     suelo.id = 'sueloJuego';
     personaje.src = '../GeOsometryDash/imagenes/Oso.jpg';
@@ -274,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.currentTime = 0;
         audio.play();
         modoActual = 'Cubo';
-        posicionFondo = 0.00, posicionSuelo = 0.00, posicionPersonaje = 5, posicionTrampolin = 225;
+        posicionFondo = 0.00, posicionSuelo = 0.00, posicionPersonaje = 5;
         limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
         cambioGravedad = false;
         enAire = false;
@@ -282,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         pararIntervalos();
         contenedorJuego.appendChild(personaje);
-        contenedorJuego.appendChild(trampolin);
         contenedorJuego.appendChild(pantallaPausa);
 
         contenedorJuego.style.backgroundImage = 'url(../GeOsometryDash/imagenes/Fondo_juego.png)';
@@ -342,7 +336,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 actualizarFondo(deltaTime);
                 actualizarObstaculos(deltaTime);
-                actualizarObjetosEspeciales(deltaTime);
                 actualizarPersonaje(deltaTime);
                 comprobarColisiones(personaje);
             }
@@ -418,12 +411,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // }
 
         }
-    }
-
-    function actualizarObjetosEspeciales(deltaTime) {
-        // Trampolín
-        posicionTrampolin -= 0.2 * deltaTime * velocidad;
-        trampolin.style.left = posicionTrampolin + 'rem';
     }
 
     function eliminarElemento(iteracionEstructura, elemento) {
