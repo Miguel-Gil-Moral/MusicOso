@@ -8,9 +8,12 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/welcome.css',
                 'resources/js/app.js',
                 'resources/css/games/osoDancer.css',
                 'resources/js/games/osoDancer/app.js',
+                'resources/css/games/GuitarherOso.css',
+                'resources/js/games/GuitarherOso/Controls.js',
             ],
             refresh: true,
             fonts: [
