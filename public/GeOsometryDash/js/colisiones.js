@@ -64,6 +64,7 @@ function comprobarColisiones(personaje) {
     const zarzas = document.querySelectorAll('.zarzas');
     const bloques = document.querySelectorAll('.bloque');
     const bloquesTop = document.querySelectorAll('.bloqueTop');
+    const bloquesBottom = document.querySelectorAll('.bloqueBottom');
     const espejos = document.querySelectorAll('.espejo');
     const trampolines = document.querySelectorAll('.trampolin');
     const bandera = document.querySelector('.bandera');
@@ -78,8 +79,20 @@ function comprobarColisiones(personaje) {
         }
     })
     bloquesTop.forEach(bloqueTop => {
-        if (colision(personaje, bloqueTop)){
+        if (colision(personaje, bloqueTop) && !cambioGravedad){
             sueloPersonaje = parseFloat(personaje.style.bottom);
+        } else if (colision(personaje, bloqueTop) && cambioGravedad) {
+            personajeCaido();
+        } else if (!colision(personaje, bloqueTop) && !cambioGravedad && sueloPersonaje != 5) {
+            sueloPersonaje = 5;
+            realizarCaida();
+        }
+    })
+    bloquesBottom.forEach(bloqueBottom => {
+        if(colision(personaje, bloqueBottom) && cambioGravedad){
+            sueloPersonaje = parseFloat(personaje.style.bottom);
+        } else if (colision(personaje, bloqueBottom) && !cambioGravedad) {
+            personajeCaido();
         }
     })
     espejos.forEach(espejo => {

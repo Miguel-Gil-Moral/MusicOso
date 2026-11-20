@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
             }
-            if (elemento.nombre === 'bloque' && !elemento?.posicionBottom) {
+            if (elemento.nombre === 'bloque') {
                 divTopBloque.style.left = elemento.posicion + 'rem';
                 divTopBloque.style.bottom = elemento?.posicionBottom ? elemento.posicionBottom + 3.6 + 'rem' : posicionBottom + 3.6 + 'rem';
                 contenedorJuego.appendChild(divTopBloque);
@@ -159,16 +159,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     nombre: divTopBloque.classList[0],
                     posicion: elemento.posicion
                 });
-            } else if (elemento.nombre === 'bloque' && elemento?.posicionBottom) {
-                divBottomBloque = document.createElement('div');
-                divBottomBloque.classList.add('bloqueBottom');
-                divBottomBloque.style.left = elemento.posicion + 'rem';
-                divBottomBloque.style.bottom = elemento.posicionBottom + 'rem';
-                contenedorJuego.appendChild(divBottomBloque);
-                temp.push({
-                    nombre: divBottomBloque.classList[0],
-                    posicion: elemento.posicion
-                })
+                if (elemento?.posicionBottom) {
+                    divBottomBloque = document.createElement('div');
+                    divBottomBloque.classList.add('bloqueBottom');
+                    divBottomBloque.style.left = elemento.posicion + 'rem';
+                    divBottomBloque.style.bottom = elemento.posicionBottom + 'rem';
+                    contenedorJuego.appendChild(divBottomBloque);
+                    temp.push({
+                        nombre: divBottomBloque.classList[0],
+                        posicion: elemento.posicion
+                    })
+                }
             }
             if(elemento?.elementoEncima){
                 const elementoNuevo = document.createElement('img');
@@ -200,6 +201,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         break;
                 }
                 elementoNuevo.style.left = elemento.elementoDebajo.posicion + 'rem';
+                elementoNuevo.style.bottom = elemento.posicionBottom - 3.6 + 'rem';
+                elementoNuevo.style.rotate = '180deg';
+                contenedorJuego.appendChild(elementoNuevo);
             }
         })
         estructuraNivel = temp;
@@ -361,10 +365,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function actualizarObstaculos(deltaTime) {
 
-        let iteraciones = [0, 0, 0, 0, 0, 0, 0]; //Zarzas, bloques, bloquesTop, espejo, letrero, baya, trampolin
+        //Zarzas, bloques, bloquesTop, bloquesBottom, espejo, letrero, baya, trampolin
+        let iteraciones = [0, 0, 0, 0, 0, 0, 0, 0];
 
         const bloques = document.querySelectorAll('.bloque');
         const topBloques = document.querySelectorAll('.bloqueTop');
+        const bottomBloques = document.querySelectorAll('.bloqueBottom');
         const zarzas = document.querySelectorAll('.zarzas');
         const espejos = document.querySelectorAll('.espejo');
         const bayas = document.querySelectorAll('.baya');
@@ -392,10 +398,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         // eliminarElemento(i, topBloques[iteraciones[2]]);
                         iteraciones[2]++;
                         break;
-                    case 'espejo':
-                        espejos[iteraciones[3]].style.left = estructuraNivel[i].posicion + 'rem';
+                    case 'bloqueBottom':
+                        bottomBloques[iteraciones[3]].style.left = estructuraNivel[i].posicion + 'rem';
 
                         iteraciones[3]++;
+                        break;
+                    case 'espejo':
+                        espejos[iteraciones[4]].style.left = estructuraNivel[i].posicion + 'rem';
+
+                        iteraciones[4]++;
                         break;
                     case 'letrero':
                         break;
