@@ -49,9 +49,33 @@ function actualizarPersonaje(deltaTime) {
                 prohibidoSaltar = false;
             }
             break;
-        case 'volando':
+        case 'surf_subida':
             if (!cambioGravedad) {
-                posicionPersonaje += 0.02 * deltaTime * velocidad;
+                posicionPersonaje += sumaSurf * deltaTime * velocidad;
+                
+                sumaSurf += sumaSurf;
+            } else {
+                posicionPersonaje -= sumaSurf * deltaTime * velocidad;
+                
+                sumaSurf += sumaSurf;
+            }
+            break;
+        case 'surf_bajada':
+            if (!cambioGravedad) {
+                // if (sumaSurf < 1) {
+                //     sumaSurf = 1;
+                // }
+                posicionPersonaje -= sumaSurf * deltaTime * velocidad;
+                
+                sumaSurf += sumaSurf;
+            } else {
+                // if (sumaSurf < 1) {
+                //     sumaSurf = 1;
+                // }
+
+                posicionPersonaje += sumaSurf * deltaTime * velocidad;
+                
+                sumaSurf += sumaSurf;
             }
             break;
     }
@@ -84,7 +108,7 @@ function realizarCaida() {
 
 function personajeCaido() {
     if (muriendo) return;
-
+    clearInterval(tiempoSuma);
     audio.pause();
 
     muriendo = true;

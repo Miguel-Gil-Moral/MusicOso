@@ -66,6 +66,7 @@ function comprobarColisiones(personaje) {
     const bloques = document.querySelectorAll('.bloque');
     const bloquesTop = document.querySelectorAll('.bloqueTop');
     const bloquesBottom = document.querySelectorAll('.bloqueBottom');
+    const letreros = document.querySelectorAll('.letrero');
     const espejos = document.querySelectorAll('.espejo');
     const trampolines = document.querySelectorAll('.trampolin');
     const bandera = document.querySelector('.bandera');
@@ -84,12 +85,15 @@ function comprobarColisiones(personaje) {
         if (colision(personaje, bloqueTop) && !cambioGravedad){
             sueloPersonaje = parseFloat(personaje.style.bottom);
             encimaBloque = true;
+            prohibidoSaltar = false;
         } else if (colision(personaje, bloqueTop) && cambioGravedad) {
             personajeCaido();
         } else if (!colision(personaje, bloqueTop) && !cambioGravedad &&
         sueloPersonaje != 5 && !encimaBloque) {
-            console.log('Ha caido')
             sueloPersonaje = 5;
+            limiteCaidaLenta = parseFloat(personaje.style.bottom) - 1;
+            limiteCaidaMedia = limiteCaidaLenta - 1;
+            prohibidoSaltar = true;
             realizarCaida();
         }
     })
@@ -100,30 +104,33 @@ function comprobarColisiones(personaje) {
             personajeCaido();
         }
     })
+    letreros.forEach(letrero => {
+        if (colision(personaje, letrero)){
+            switch(letrero.dataset.modo) {
+                case 'surf':
+                    modoActual = 'Surf';
+                    break;
+                case 'bola':
+                    modoActual = 'Bola';
+                    break;
+                case 'ufo':
+                    modoActual = 'Ufo';
+                    break;
+            }
+        }
+    })
     espejos.forEach(espejo => {
         if(colision(personaje, espejo)){
             espejoGravedad();
         }
     })
 
-    // if (colisionBaya(personaje, baya)) {
-    //     prohibidoSaltar = false;
-    // }
-
     trampolines.forEach(trampolin => {
         if (colision(personaje, trampolin)) {
             realizarSalto();
         }
     })
-    // // Baya
-    // if (colision(personaje, baya)) {
-    //     prohibidoSaltar = false;
-    // }
 
-    // // Trampolín
-    // if (colision(personaje, trampolin)) {
-    //     realizarSalto();
-    // }
     if(colision(personaje, bandera)) {
         
     }
