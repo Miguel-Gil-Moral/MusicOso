@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('contrasenya');
             $table->integer('nivells_superats')->default(0);
-            $table->foreignId('rol')->constrained('rols');
+            $table->foreignId('rol')->default(6)->constrained('rols');
         });
     }
 
