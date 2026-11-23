@@ -1,3 +1,5 @@
+let encimaBloque = false;
+let estaBaya = false;
 function colision(personaje, elemento) {
     const el1 = personaje.getBoundingClientRect();
     const el2 = elemento.getBoundingClientRect();
@@ -64,9 +66,14 @@ function comprobarColisiones(personaje) {
     const zarzas = document.querySelectorAll('.zarzas');
     const bloques = document.querySelectorAll('.bloque');
     const bloquesTop = document.querySelectorAll('.bloqueTop');
+    const bloquesBottom = document.querySelectorAll('.bloqueBottom');
+    const letreros = document.querySelectorAll('.letrero');
     const espejos = document.querySelectorAll('.espejo');
+    const bayas = document.querySelectorAll('.baya');
     const trampolines = document.querySelectorAll('.trampolin');
     const bandera = document.querySelector('.bandera');
+    encimaBloque = false;
+    estaBaya = false;
     zarzas.forEach(zarza => {
         if (colisionZarza(personaje, zarza)) {
             personajeCaido();
@@ -78,8 +85,41 @@ function comprobarColisiones(personaje) {
         }
     })
     bloquesTop.forEach(bloqueTop => {
-        if (colision(personaje, bloqueTop)){
+        if (colision(personaje, bloqueTop) && !cambioGravedad){
             sueloPersonaje = parseFloat(personaje.style.bottom);
+            encimaBloque = true;
+            prohibidoSaltar = false;
+        } else if (colision(personaje, bloqueTop) && cambioGravedad) {
+            personajeCaido();
+        } else if (!colision(personaje, bloqueTop) && !cambioGravedad &&
+        sueloPersonaje != 5 && !encimaBloque) {
+            sueloPersonaje = 5;
+            limiteCaidaLenta = parseFloat(personaje.style.bottom) - 1;
+            limiteCaidaMedia = limiteCaidaLenta - 1;
+            prohibidoSaltar = true;
+            realizarCaida();
+        }
+    })
+    bloquesBottom.forEach(bloqueBottom => {
+        if(colision(personaje, bloqueBottom) && cambioGravedad){
+            sueloPersonaje = parseFloat(personaje.style.bottom);
+        } else if (colision(personaje, bloqueBottom) && !cambioGravedad) {
+            personajeCaido();
+        }
+    })
+    letreros.forEach(letrero => {
+        if (colision(personaje, letrero)){
+            switch(letrero.dataset.modo) {
+                case 'surf':
+                    modoActual = 'Surf';
+                    break;
+                case 'bola':
+                    modoActual = 'Bola';
+                    break;
+                case 'ufo':
+                    modoActual = 'Ufo';
+                    break;
+            }
         }
     })
     espejos.forEach(espejo => {
@@ -87,25 +127,19 @@ function comprobarColisiones(personaje) {
             espejoGravedad();
         }
     })
-
-    // if (colisionBaya(personaje, baya)) {
-    //     prohibidoSaltar = false;
-    // }
-
+    bayas.forEach(baya => {
+        if(colision(personaje, baya)){
+            dobleSalto = true;
+        } else if (!colision(personaje, baya) && !estaBaya) {
+            dobleSalto = false;
+        }
+    })
     trampolines.forEach(trampolin => {
         if (colision(personaje, trampolin)) {
             realizarSalto();
         }
     })
-    // // Baya
-    // if (colision(personaje, baya)) {
-    //     prohibidoSaltar = false;
-    // }
 
-    // // Trampolín
-    // if (colision(personaje, trampolin)) {
-    //     realizarSalto();
-    // }
     if(colision(personaje, bandera)) {
         
     }
