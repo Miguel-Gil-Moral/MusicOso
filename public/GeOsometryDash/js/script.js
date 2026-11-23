@@ -6,6 +6,7 @@
     let pause = false;
     let cambioGravedad = false;
     let prohibidoSaltar = false;
+    let dobleSalto = false;
 
     let pantallaActual = 'Menu';
     let modoActual = 'Cubo';
@@ -83,13 +84,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 encabezadoPausa.textContent = nivel.dataset.nombre;
                 divNiveles.style.display = 'none';
                 switch(nivel.dataset.nombre){
-                    case 'StereOso Madness':
+                    case "StereOso Madness":
                         establecerAudio('../GeOsometryDash/audio/stereo_madness.mp3');
                         break;
-                    case 'Oso Can\'t Let Go':
+                    case "Oso Can't Let Go":
                         establecerAudio('../GeOsometryDash/audio/cant_let_go.mp3');
                         break;
-                    case 'UltraOso':
+                    case "UltraOso":
                         establecerAudio('../GeOsometryDash/audio/sonic_blaster.mp3');
                         break;
                 }
@@ -144,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'trampolin':
                     imagen.src = '../GeOsometryDash/imagenes/Trampolin.png';
+                    posicionBottom = 3.5;
                     break;
                 case 'bandera':
                     imagen.src = '../GeOsometryDash/imagenes/Bandera.png';
@@ -238,8 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         estructuraNivel = temp;
-        copiaSeguridad = temp;
-        console.log(estructuraNivel);
     }
 
     function quitarElementos() {
@@ -254,6 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const bandera = document.querySelector('.bandera');
         contenedorJuego.removeChild(suelo);
         contenedorJuego.removeChild(personaje);
+        contenedorJuego.removeChild(tiempo);
         zarzas.forEach(zarza => {
             contenedorJuego.removeChild(zarza);
         });
@@ -344,14 +345,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function actualizarTiempo(){
         tiempoSuma = setInterval(function() {
-            if (segundosActual <= 60) {
+            if (segundosActual < 59) {
                 segundosActual += 1;
             } else {
                 segundosActual = 0;
                 minutosActual++;
             }
             tiempo.textContent = minutosActual + 'm ' + segundosActual + 's';
-        }, 1000);
+        }, 999);
     }
 
     //Funcionamiento juego
@@ -466,8 +467,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         iteraciones[5]++;
                         break;
                     case 'baya':
+                        bayas[iteraciones[6]].style.left = estructuraNivel[i].posicion + 'rem';
+
+                        iteraciones[6]++;
                         break;
                     case 'trampolin':
+                        trampolines[iteraciones[7]].style.left = estructuraNivel[i].posicion + 'rem';
+                        
+                        iteraciones[7]++;
                         break;
                     case 'bandera':
                         bandera.style.left = estructuraNivel[i].posicion + 'rem';
@@ -485,48 +492,6 @@ document.addEventListener('DOMContentLoaded', function() {
             contenedorJuego.removeChild(elemento);
         }
     }
-
-    /// REVISAR: NO SE USA (tampoco en el original)
-    // function agregarElemento(iteracionEstructura) {
-    //     if (estructuraNivel[iteracionEstructura].posicion > -10 && 
-    //         estructuraNivel[iteracionEstructura].posicion <= 300 &&
-    //         !estructuraNivel[iteracionEstructura].visible
-    //     ) {
-    //         estructuraNivel[iteracionEstructura].visible = true;
-    //         let elemento;
-    //         if (estructuraNivel[iteracionEstructura].nombre != 'bloqueTop') {
-    //             elemento = document.createElement('img');
-    //             elemento.classList.add(estructuraNivel[iteracionEstructura].nombre);
-    //             switch(estructuraNivel[iteracionEstructura].nombre) {
-    //                 case 'zarzas':
-    //                     elemento.src = '../GeOsometryDash/imagenes/Zarzas.png';
-    //                     break;
-    //                 case 'bloque':
-    //                     elemento.src = '../GeOsometryDash/imagenes/Bloque.png';
-    //                     break;
-    //                 case 'bandera':
-    //                     elemento.src = '../GeOsometryDash/imagenes/Bandera.png';
-    //                     break;
-    //             }
-    //         } else {
-    //             elemento = document.createElement('div');
-    //         }
-    //         elemento.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
-    //         contenedorJuego.appendChild(elemento);
-    //         if (estructuraNivel[iteracionEstructura]?.bloquesEncima) {
-    //             let posicionBottom = 5;
-    //             for (let i = 0; i < estructuraNivel[iteracionEstructura].bloquesEncima; i++) {
-    //                 posicionBottom += 3.5;
-    //                 const bloqueEncima = document.createElement('img');
-    //                 bloqueEncima.classList.add('bloque');
-    //                 bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
-    //                 bloqueEncima.style.left = estructuraNivel[iteracionEstructura].posicion + 'rem';
-    //                 bloqueEncima.style.bottom = posicionBottom + 'rem';
-    //                 contenedorJuego.appendChild(bloqueEncima);
-    //             }
-    //         }
-    //     }
-    // }
 
     function reiniciarJuego() {
         const encabezadoPausa = document.getElementById('encabezadoPausa');
@@ -609,9 +574,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /**  ARREGLAR POSTERIORMENTE
  * 
  * Dos detalles que quiero que tengas en cuenta antes de probarlo
-En comprobarColisiones() debes evitar que los elementos ya eliminados se sigan comprobando. Además, sería conveniente comprobar que bandera y los demás elementos existen antes de acceder a ellos en actualizarObstaculos(). La implementación actual conserva algunas limitaciones de tu sistema de eliminación original.
-
-Tu getEstructuraStereoso() debería devolver una copia de los datos originales mediante .map(elemento => ({...elemento})), para que reiniciar el nivel no conserve las posiciones modificadas.
+ * En comprobarColisiones() debes evitar que los elementos ya eliminados se sigan comprobando. Además, sería conveniente comprobar que bandera y los demás elementos existen antes de acceder a ellos en actualizarObstaculos(). La implementación actual conserva algunas limitaciones de tu sistema de eliminación original.
  * 
  * 
  * 

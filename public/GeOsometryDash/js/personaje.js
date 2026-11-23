@@ -86,7 +86,7 @@ function realizarSalto() {
     enAire = true;
     sueloPersonaje = 5;
     
-    if(!prohibidoSaltar) {
+    if(!prohibidoSaltar || dobleSalto) {
         limiteSalto = posicionPersonaje + 10;
         limiteCaidaLenta = limiteSalto - 1;
         limiteCaidaMedia = limiteSalto - 2;

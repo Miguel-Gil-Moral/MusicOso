@@ -1,4 +1,5 @@
 let encimaBloque = false;
+let estaBaya = false;
 function colision(personaje, elemento) {
     const el1 = personaje.getBoundingClientRect();
     const el2 = elemento.getBoundingClientRect();
@@ -68,9 +69,11 @@ function comprobarColisiones(personaje) {
     const bloquesBottom = document.querySelectorAll('.bloqueBottom');
     const letreros = document.querySelectorAll('.letrero');
     const espejos = document.querySelectorAll('.espejo');
+    const bayas = document.querySelectorAll('.baya');
     const trampolines = document.querySelectorAll('.trampolin');
     const bandera = document.querySelector('.bandera');
     encimaBloque = false;
+    estaBaya = false;
     zarzas.forEach(zarza => {
         if (colisionZarza(personaje, zarza)) {
             personajeCaido();
@@ -124,7 +127,13 @@ function comprobarColisiones(personaje) {
             espejoGravedad();
         }
     })
-
+    bayas.forEach(baya => {
+        if(colision(personaje, baya)){
+            dobleSalto = true;
+        } else if (!colision(personaje, baya) && !estaBaya) {
+            dobleSalto = false;
+        }
+    })
     trampolines.forEach(trampolin => {
         if (colision(personaje, trampolin)) {
             realizarSalto();

@@ -36,3 +36,8 @@ input {
     background-color: #176b5b;
     border-radius: 8px
 }
+#botones-comoJugar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

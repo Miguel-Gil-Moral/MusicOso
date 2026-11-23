@@ -202,22 +202,29 @@ class Niveles {
         { nombre: 'bandera', posicion: 10000 }
     ];
     osoCantLetGo = [
-        {}
+        { nombre: 'letrero', posicion: 50, modoOso: 'bola'}
     ];
     ultraOso = [
-        {}
+        { nombre: 'trampolin', posicion: 25 },
+        { nombre: 'bloque', posicion: 35, elementoEncima: { nombre: 'zarzas', posicion: 35 } },
+        { nombre: 'zarzas', posicion: 60 },
+        { nombre: 'zarzas', posicion: 63.4 },
+        { nombre: 'zarzas', posicion: 66.4 },
+        { nombre: 'zarzas', posicion: 69.4 },
+        { nombre: 'baya', posicion: 65, posicionBottom: 10 },
+        { nombre: 'bandera', posicion: 1000 }
     ]
 
     getEstructura(nombre) {
         let estructura;
         switch(nombre){
-            case 'StereOso Madness':
+            case "StereOso Madness":
                 estructura = this.stereosoMadness;
                 break;
-            case 'Oso Cant\' Let Go':
+            case "Oso Can't Let Go":
                 estructura = this.osoCantLetGo;
                 break;
-            case 'UltraOso':
+            case "UltraOso":
                 estructura = this.ultraOso;
                 break;
         }

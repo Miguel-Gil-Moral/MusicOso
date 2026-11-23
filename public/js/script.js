@@ -14,4 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         })
     })
+
+    const botones_como_jugar = document.querySelectorAll('#botones-comoJugar button');
+
+    botones_como_jugar.forEach(boton => {
+        boton.addEventListener('click', function() {
+            
+        })
+    })
 })
