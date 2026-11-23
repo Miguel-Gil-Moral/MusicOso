@@ -4,18 +4,34 @@ const velocidad = 3.5; // Aplicar a los elementos que aparezcan lentos
 function actualizarPersonaje(deltaTime) {
     switch (estadoPersonaje) {
         case 'saltando':
-            if (posicionPersonaje >= limiteCaidaLenta &&
-                posicionPersonaje < limiteSalto) {
-                posicionPersonaje += 0.07 * deltaTime * velocidad;
-            } else if (posicionPersonaje >= limiteCaidaMedia &&
-                posicionPersonaje < limiteCaidaLenta) {
-                posicionPersonaje += 0.17 * deltaTime * velocidad;
+            if(!cambioGravedad){
+                if (posicionPersonaje >= limiteCaidaLenta &&
+                    posicionPersonaje < limiteSalto) {
+                    posicionPersonaje += 0.07 * deltaTime * velocidad;
+                } else if (posicionPersonaje >= limiteCaidaMedia &&
+                    posicionPersonaje < limiteCaidaLenta) {
+                    posicionPersonaje += 0.17 * deltaTime * velocidad;
+                } else {
+                    posicionPersonaje += 0.27 * deltaTime * velocidad;
+                }
+                if (posicionPersonaje >= limiteSalto) {
+                    posicionPersonaje = limiteSalto;
+                    realizarCaida();
+                }
             } else {
-                posicionPersonaje += 0.27 * deltaTime * velocidad;
-            }
-            if (posicionPersonaje >= limiteSalto) {
-                posicionPersonaje = limiteSalto;
-                realizarCaida();
+                if (posicionPersonaje >= limiteCaidaLenta &&
+                    posicionPersonaje < limiteSalto) {
+                    posicionPersonaje -= 0.07 * deltaTime * velocidad;
+                } else if (posicionPersonaje >= limiteCaidaMedia &&
+                    posicionPersonaje < limiteCaidaLenta) {
+                    posicionPersonaje -= 0.17 * deltaTime * velocidad;
+                } else {
+                    posicionPersonaje -= 0.27 * deltaTime * velocidad;
+                }
+                if (posicionPersonaje >= limiteSalto) {
+                    posicionPersonaje = limiteSalto;
+                    realizarCaida();
+                }
             }
             break;
         case 'cayendo':

@@ -130,6 +130,7 @@ function comprobarColisiones(personaje) {
     bayas.forEach(baya => {
         if(colision(personaje, baya)){
             dobleSalto = true;
+            estaBaya = true;
         } else if (!colision(personaje, baya) && !estaBaya) {
             dobleSalto = false;
         }

@@ -202,7 +202,9 @@ class Niveles {
         { nombre: 'bandera', posicion: 10000 }
     ];
     osoCantLetGo = [
-        { nombre: 'letrero', posicion: 50, modoOso: 'bola'}
+        { nombre: 'letrero', posicion: 50, modoOso: 'bola' },
+        { nombre: 'letrero', posicion: 100, modoOso: 'ufo' },
+        { nombre: 'bandera', posicion: 10000 }
     ];
     ultraOso = [
         { nombre: 'trampolin', posicion: 25 },
@@ -211,7 +213,26 @@ class Niveles {
         { nombre: 'zarzas', posicion: 63.4 },
         { nombre: 'zarzas', posicion: 66.4 },
         { nombre: 'zarzas', posicion: 69.4 },
+        { nombre: 'zarzas', posicion: 72.4 },
+        { nombre: 'zarzas', posicion: 75.4 },
+        { nombre: 'zarzas', posicion: 78.4 },
+        { nombre: 'zarzas', posicion: 81.4 },
+        { nombre: 'zarzas', posicion: 84.4 },
+        { nombre: 'zarzas', posicion: 87.4 },
+        { nombre: 'zarzas', posicion: 90.4 },
+        { nombre: 'zarzas', posicion: 93.4 },
+        { nombre: 'zarzas', posicion: 96.4 },
+        { nombre: 'zarzas', posicion: 99.4 },
+        { nombre: 'zarzas', posicion: 102.4 },
+        { nombre: 'zarzas', posicion: 105.4 },
+        { nombre: 'zarzas', posicion: 108.4 },
+        { nombre: 'zarzas', posicion: 111.4 },
+        { nombre: 'zarzas', posicion: 114.4 },
         { nombre: 'baya', posicion: 65, posicionBottom: 10 },
+        { nombre: 'espejo', posicion: 80, posicionBottom: 20 },
+        { nombre: 'baya', posicion: 85, posicionBottom: 30 },
+        { nombre: 'baya', posicion: 100, posicionBottom: 27.5 },
+        { nombre: 'espejo', posicion: 110, posicionBottom: 22.5 },
         { nombre: 'bandera', posicion: 1000 }
     ]
 

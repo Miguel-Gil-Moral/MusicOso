@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const niveles = document.querySelectorAll('a');
     
     const tiempo = document.createElement('p');
+    const intentos = document.createElement('h2');
     const suelo = document.createElement('div');
     const personaje = document.createElement('img');
 
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     personaje.src = '../GeOsometryDash/imagenes/Oso.jpg';
     personaje.id = 'personaje';
     tiempo.id = 'tiempoJuego';
+    intentos.id = 'intentos';
 
     establecerMenu();    
     
@@ -137,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             break;
                     }
                     imagen.dataset.modo = elemento.modoOso;
+                    break;
                 case 'espejo':
                     imagen.src = '../GeOsometryDash/imagenes/Espejo.png';
                     break;
@@ -548,6 +551,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         realizarSalto();
                     } else if (modoActual === 'Surf') {
                         surf();
+                    } else if (modoActual === 'Bola') {
+                        espejoGravedad();
+                        realizarCaida();
+                    } else if (modoActual === 'Ufo') {
+                        prohibidoSaltar = false;
+                        realizarSalto();
                     }
                 }
                 break;

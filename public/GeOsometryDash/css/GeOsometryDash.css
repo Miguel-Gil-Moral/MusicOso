@@ -99,6 +99,11 @@ a {
     top: 1rem;
 }
 
+#intentos {
+    position: absolute;
+    color: white;
+}
+
 .bloque, .zarzas, .espejo, .caja, .baya, .trampolin, .bandera, .bloqueTop, .bloqueBottom, .letrero {
     position: absolute;
 }
