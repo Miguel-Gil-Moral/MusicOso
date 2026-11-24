@@ -15,12 +15,13 @@ class Sesio extends Model
     protected $fillable = [
         'id_usuari',
         'temps_sesio',
-        'data_hora_inici'
+        'data_hora_inici',
     ];
 
     protected function casts(): array {
         return [
             'data_hora_inici' => 'datetime',
+            'temps_sesio' => 'integer',
         ];
     }
 
