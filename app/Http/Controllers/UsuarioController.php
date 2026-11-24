@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rol;
 use App\Models\Usuari;
+use App\Services\SesioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +30,7 @@ class UsuarioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, SesioService $sesioService)
     {
         $dades = $request->validate([
             'nom' => ['required', 'string', 'max:255'],
@@ -46,6 +47,7 @@ class UsuarioController extends Controller
 
         Auth::login($usuari);
         $request->session()->regenerate();
+        $sesioService->iniciar($request, $usuari);
 
         return redirect()->route('welcome');
     }
