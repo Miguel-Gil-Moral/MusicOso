@@ -4,7 +4,10 @@
 @section('title', 'Mapa')
 
 @section('content')
-    <a href="{{ route('welcome') }}" class="back-button"><img src="{{ Vite::asset('resources/assets/backButton.png') }}" alt="Volver"></a>
+    <button type="button" class="back-button" data-leave-dialog="confirmar-salida-oso-dancer" aria-label="Volver al mapa">
+        <img src="{{ Vite::asset('resources/assets/backButton.png') }}" alt="">
+    </button>
+    <x-confirm-leave-level dialog-id="confirmar-salida-oso-dancer" />
     <header id="header">
         <div id="cartel-container">
             <img src="{{ Vite::asset('resources/assets/osoDancer/cartel.svg') }}" id="cartel-img">
@@ -36,5 +39,10 @@
 @endsection
 
 @push('scripts')
-    @vite(['resources/css/games/osoDancer.css', 'resources/js/games/osoDancer/app.js'])
+    @vite([
+        'resources/css/games/osoDancer.css',
+        'resources/css/components/confirm-leave-level.css',
+        'resources/js/components/confirm-leave-level.js',
+        'resources/js/games/osoDancer/app.js',
+    ])
 @endpush

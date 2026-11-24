@@ -27,8 +27,8 @@
                 <input id="nom" type="text" name="nom" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="example@company.com" value="{{ old('nom') }}" required />
             </div>
             <div>
-                <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Contraseña</label>
-                <input id="password" type="password" name="password" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" value="{{ old('password') }}" required />
+                <label for="contrasenya" class="block mb-2.5 text-sm font-medium text-heading">Contraseña</label>
+                <input id="contrasenya" type="password" name="contrasenya" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="•••••••••" required />
             </div>
             <button id="botonLogin" type="submit" class="botonLogin text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none w-full mb-3">Iniciar Sesión</button>
             <div class="preguntaLogin text-sm font-medium text-body">No tienes cuenta? <a href="#" class="cambiarPanel text-fg-brand hover:underline">Crear cuenta</a></div>
@@ -41,12 +41,16 @@
 
             <h1 class="text-xl font-semibold text-heading mb-6">Crear cuenta</h1>
             <div class="mb-4">
-                <label for="nom" class="block mb-2.5 text-sm font-medium text-heading">Nombre</label>
-                <input id="nomb" type="text" name="nomb" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" required>
+                <label for="nom-registre" class="block mb-2.5 text-sm font-medium text-heading">Nombre</label>
+                <input id="nom-registre" type="text" name="nom" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" value="{{ old('nom') }}" required>
             </div>
             <div>
-                <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Contraseña</label>
-                <input id="password" type="password" name="password" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" required />
+                <label for="contrasenya-registre" class="block mb-2.5 text-sm font-medium text-heading">Contraseña</label>
+                <input id="contrasenya-registre" type="password" name="contrasenya" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" required />
+            </div>
+            <div class="mb-4">
+                <label for="contrasenya_confirmation" class="block mb-2.5 text-sm font-medium text-heading">Repite la contraseña</label>
+                <input id="contrasenya_confirmation" type="password" name="contrasenya_confirmation" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" required />
             </div>
             <button type="submit" class="botonLogin text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none w-full mb-3">Iniciar Sesión</button>
             <div class="preguntaLogin text-sm font-medium text-body">Ya tienes cuenta? <a href="#" class="cambiarPanel text-fg-brand hover:underline">Iniciar sesión</a></div>

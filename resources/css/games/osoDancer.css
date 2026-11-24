@@ -262,6 +262,8 @@ body {
     z-index: 1000;
     padding: 0;
     background: transparent;
+    border: 0;
+    cursor: pointer;
     transition: transform 0.2s ease;
 }
 

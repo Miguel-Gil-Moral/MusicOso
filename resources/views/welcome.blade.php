@@ -6,6 +6,13 @@
 @vite('resources/css/welcome.css')
 
 <div class="welcome-background">
+    <form action="{{ route('logout') }}" method="POST" class="logout-form">
+        @csrf
+        <button type="submit" class="logout-button" aria-label="Cerrar sesión">
+            <img src="{{ Vite::asset('resources/assets/buttonLogout.png') }}" alt="">
+        </button>
+    </form>
+
     @for ($i = 1; $i <= 6; $i++)
         <a href="{{ route('games.osoDancer') }}"
            class="boton-nivel nivel-{{ $i }}"

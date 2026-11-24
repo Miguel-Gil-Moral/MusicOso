@@ -28,6 +28,33 @@ body {
     background-repeat: no-repeat;
 }
 
+.logout-form {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+}
+
+.logout-button {
+    display: block;
+    width: clamp(9rem, 18vw, 16rem);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.logout-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.logout-button:hover,
+.logout-button:focus-visible {
+    filter: brightness(0.9);
+}
+
 /* BOTONES DE NIVELES */
 .boton-nivel {
     position: absolute;

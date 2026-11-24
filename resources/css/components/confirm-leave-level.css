@@ -1,0 +1,66 @@
+.leave-level-dialog {
+    position: fixed;
+    inset: 0;
+    width: min(94vw, 600px);
+    height: fit-content;
+    margin: auto;
+    padding: 0;
+    color: #3d1c06;
+    background: transparent;
+    border: 0;
+}
+
+.leave-level-dialog::backdrop {
+    background: rgb(14 27 40 / 65%);
+}
+
+.leave-level-dialog__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    aspect-ratio: 3 / 2;
+    padding: 13% 16%;
+    text-align: center;
+    background: url("../../assets/hoja.svg") center / contain no-repeat;
+}
+
+.leave-level-dialog h2 {
+    margin: 0 0 0.7rem;
+    font-size: 1.45rem;
+}
+
+.leave-level-dialog p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.leave-level-dialog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.leave-level-dialog button,
+.leave-level-dialog a {
+    display: inline-block;
+    padding: 0.9rem 1.25rem;
+    color: #fff;
+    font: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.leave-level-dialog__cancel {
+    background: #176b5b;
+}
+
+.leave-level-dialog__confirm {
+    order: -1;
+    background: #a33832;
+}
