@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Usuari;
+use App\Services\SesioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request, SesioService $sesioService) {
         $credencials = $request->validate([
             'nom' => ['required', 'string'],
             'contrasenya' => ['required', 'string'],
@@ -25,6 +26,7 @@ class LoginController extends Controller
         if ($usuari && Hash::check($credencials['contrasenya'], $usuari->contrasenya)) {
             Auth::login($usuari);
             $request->session()->regenerate();
+            $sesioService->iniciar($request, $usuari);
 
             return redirect()->intended(route('welcome'));
         }
@@ -34,7 +36,13 @@ class LoginController extends Controller
             ->onlyInput('nom');
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request, SesioService $sesioService) {
+        $usuari = Auth::user();
+
+        if ($usuari instanceof Usuari) {
+            $sesioService->finalizar($request, $usuari);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
