@@ -5,10 +5,10 @@ function colision(personaje, elemento) {
     const el2 = elemento.getBoundingClientRect();
 
     return !(
-        el1.right < el2.left ||
-        el1.left > el2.right ||
-        el1.bottom < el2.top ||
-        el1.top > el2.bottom
+        el1.right - 16 < el2.left ||
+        el1.left + 16 > el2.right ||
+        el1.bottom - 16 < el2.top ||
+        el1.top + 16 > el2.bottom
     );
 }
 
@@ -17,10 +17,10 @@ function colisionZarza(personaje, zarza) {
     const el2 = zarza.getBoundingClientRect();
 
     return !(
-        el1.right < el2.left + 16||
-        el1.left > el2.right - 16 ||
-        el1.bottom < el2.top + 16 ||
-        el1.top > el2.bottom - 16
+        el1.right - 16 < el2.left + 16||
+        el1.left + 16 > el2.right - 16 ||
+        el1.bottom - 16 < el2.top + 16 ||
+        el1.top + 16 > el2.bottom - 16
     );
 }
 
@@ -29,10 +29,10 @@ function colisionBloque(personaje, bloque) {
     const el2 = bloque.getBoundingClientRect();
 
     return !(
-        el1.right < el2.left + 3.5 ||
-        el1.left > el2.right - 3.5 ||
-        el1.bottom < el2.top + (16 * 2) ||
-        el1.top > el2.bottom - (16 * 2)
+        el1.right - 16 < el2.left + 3.5 ||
+        el1.left + 16 > el2.right - 3.5 ||
+        el1.bottom - 16 < el2.top + (16 * 2) ||
+        el1.top + 16 > el2.bottom - (16 * 2)
     )
 }
 
@@ -42,10 +42,10 @@ function colisionTopBloque(personaje, bloqueTop) {
     const el2 = bloqueTop.getBoundingClientRect();
 
     return !(
-        el1.right > el2.left ||
-        el1.left < el2.right ||
-        el1.bottom >= el2.top ||
-        el1.bottom <= el2.top + 10
+        el1.right - 16 > el2.left ||
+        el1.left + 16 < el2.right ||
+        el1.bottom - 16 >= el2.top ||
+        el1.bottom + 16 <= el2.top + 10
     )
 }
 
@@ -54,10 +54,10 @@ function colisionBaya(personaje, baya) {
     const el2 = baya.getBoundingClientRect();
 
     return !(
-        el1.right >= el2.left + (16 * 2) ||
-        el1.left <= el2.right - (16 * 2) ||
-        el1.bottom >= el2.top + (16 * 2) ||
-        el1.top <= el2.bottom - (16 * 2)
+        el1.right - 16 >= el2.left + (16 * 2) ||
+        el1.left + 16 <= el2.right - (16 * 2) ||
+        el1.bottom - 16 >= el2.top + (16 * 2) ||
+        el1.top + 16 <= el2.bottom - (16 * 2)
     )
 }
 
@@ -110,6 +110,9 @@ function comprobarColisiones(personaje) {
     letreros.forEach(letrero => {
         if (colision(personaje, letrero)){
             switch(letrero.dataset.modo) {
+                case 'cubo':
+                    modoActual = 'Cubo';
+                    break;
                 case 'surf':
                     modoActual = 'Surf';
                     break;

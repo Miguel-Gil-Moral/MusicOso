@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const personaje = document.createElement('img');
 
     suelo.id = 'sueloJuego';
-    personaje.src = '../GeOsometryDash/imagenes/Oso.jpg';
+    // personaje.src = '../GeOsometryDash/imagenes/Oso.jpg';
+    personaje.src = '../GeOsometryDash/imagenes/Oso.png';
     personaje.id = 'personaje';
     tiempo.id = 'tiempoJuego';
     intentos.id = 'intentos';
@@ -128,6 +129,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'letrero':
                     switch (elemento.modoOso){
+                        case 'cubo':
+                            imagen.src = '../GeOsometryDash/imagenes/Letrero\ Cubo.png';
+                            break;
                         case 'surf':
                             imagen.src = '../GeOsometryDash/imagenes/Letrero\ Surf.png';
                             break;
@@ -202,6 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         break;
                     case 'letrero':
                         switch(elemento.elementoEncima.modoOso){
+                            case 'cubo':
+                                imagen.src = '../GeOsometryDash/imagenes/Letrero\ Cubo.png';
+                                break;
                             case 'surf':
                                 elementoNuevo.src = '../GeOsometryDash/imagenes/Letrero\ Surf.png';
                                 break;
