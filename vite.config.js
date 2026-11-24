@@ -10,6 +10,8 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/css/welcome.css',
                 'resources/js/app.js',
+                'resources/css/components/confirm-leave-level.css',
+                'resources/js/components/confirm-leave-level.js',
                 'resources/css/games/osoDancer.css',
                 'resources/js/games/osoDancer/app.js',
                 'resources/css/games/GuitarherOso.css',
