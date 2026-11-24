@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\Rol;
+use App\Models\Usuari;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
@@ -29,21 +31,29 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $usuari = new Usuario();
+        $dades = $request->validate([
+            'nom' => ['required', 'string', 'max:255'],
+            'contrasenya' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
 
-        $usuari->nom = $request->input('nom');
-        $usuari->password = bcrypt($request->input('password'));
+        $rolUsuari = Rol::firstOrCreate(['nom' => 'Usuari']);
 
-        $usuari->save();
+        $usuari = Usuari::create([
+            'nom' => $dades['nom'],
+            'contrasenya' => $dades['contrasenya'],
+            'rol' => $rolUsuari->id,
+        ]);
 
-        return redirect()->route('usuari.index');
+        Auth::login($usuari);
+        $request->session()->regenerate();
+
+        return redirect()->route('welcome');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Usuario $usuario)
+    public function show(Usuari $usuari)
     {
         //
     }
@@ -51,7 +61,7 @@ class UsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Usuario $usuario)
+    public function edit(Usuari $usuari)
     {
         //
     }
@@ -59,7 +69,7 @@ class UsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Usuario $usuario)
+    public function update(Request $request, Usuari $usuari)
     {
         //
     }
@@ -67,7 +77,7 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Usuario $usuario)
+    public function destroy(Usuari $usuari)
     {
         //
     }

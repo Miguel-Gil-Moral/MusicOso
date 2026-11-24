@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\Usuari;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,21 +15,30 @@ class LoginController extends Controller
     }
 
     public function login(Request $request) {
-        $usuari = Usuario::where('nom', $request->input('nom'))->first();
+        $credencials = $request->validate([
+            'nom' => ['required', 'string'],
+            'contrasenya' => ['required', 'string'],
+        ]);
 
-        if ($usuari && Hash::check($request->input('password'), $usuari->password)){
+        $usuari = Usuari::where('nom', $credencials['nom'])->first();
+
+        if ($usuari && Hash::check($credencials['contrasenya'], $usuari->contrasenya)) {
             Auth::login($usuari);
-            $response = redirect('welcome');
-        } else {
-            session()->flash('error', 'Las credenciales son erroneas');
-            $response = redirect()->back()->withInput();
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('welcome'));
         }
 
-        return $response;
+        return back()
+            ->withErrors(['nom' => 'Las credenciales no son correctas.'])
+            ->onlyInput('nom');
     }
 
     public function logout(Request $request) {
         Auth::logout();
-        return redirect('welcome');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }
