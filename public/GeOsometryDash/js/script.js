@@ -558,7 +558,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         realizarSalto();
                     } else if (modoActual === 'Surf') {
                         surf();
-                    } else if (modoActual === 'Bola') {
+                    } else if (modoActual === 'Bola' && !prohibidoSaltar) {
+                        prohibidoSaltar = true;
                         espejoGravedad();
                         realizarCaida();
                     } else if (modoActual === 'Ufo') {

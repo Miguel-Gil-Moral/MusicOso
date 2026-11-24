@@ -86,7 +86,8 @@ function comprobarColisiones(personaje) {
     })
     bloquesTop.forEach(bloqueTop => {
         if (colision(personaje, bloqueTop) && !cambioGravedad){
-            sueloPersonaje = parseFloat(personaje.style.bottom);
+            // sueloPersonaje = parseFloat(personaje.style.bottom);
+            sueloPersonaje = parseFloat(bloqueTop.style.bottom) + 3.6;
             encimaBloque = true;
             prohibidoSaltar = false;
         } else if (colision(personaje, bloqueTop) && cambioGravedad) {
@@ -126,8 +127,10 @@ function comprobarColisiones(personaje) {
         }
     })
     espejos.forEach(espejo => {
-        if(colision(personaje, espejo)){
+        if(colision(personaje, espejo) && !espejo.classList.contains('deshabilitar')){
             espejoGravedad();
+            espejo.classList.add('deshabilitar');
+            realizarCaida();
         }
     })
     bayas.forEach(baya => {

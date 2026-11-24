@@ -58,7 +58,7 @@ function actualizarPersonaje(deltaTime) {
                     posicionPersonaje += 0.27 * deltaTime * velocidad;
                 }
             }
-            if (posicionPersonaje <= sueloPersonaje) {
+            if (posicionPersonaje <= sueloPersonaje && !cambioGravedad) {
                 posicionPersonaje = sueloPersonaje;
                 estadoPersonaje = 'quieto';
                 enAire = false;
@@ -101,11 +101,20 @@ function actualizarPersonaje(deltaTime) {
 function realizarSalto() {
     enAire = true;
     sueloPersonaje = 5;
-    
+
     if(!prohibidoSaltar || dobleSalto) {
-        limiteSalto = posicionPersonaje + 10;
-        limiteCaidaLenta = limiteSalto - 1;
-        limiteCaidaMedia = limiteSalto - 2;
+        if (!cambioGravedad) {
+            limiteSalto = posicionPersonaje + 10;
+            limiteCaidaLenta = limiteSalto - 1;
+            limiteCaidaMedia = limiteSalto - 2;
+            sueloPersonaje = 5;
+        } else {
+            limiteSalto = posicionPersonaje - 10;
+            limiteCaidaLenta = limiteSalto + 1;
+            limiteCaidaMedia = limiteSalto + 2;
+            // sueloPersonaje = 50;
+        }
+        
         prohibidoSaltar = true;
         
         // NUEVO --> cambiar estado del personaje

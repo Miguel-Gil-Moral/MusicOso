@@ -206,6 +206,7 @@ class Niveles {
         { nombre: 'letrero', posicion: 100, modoOso: 'ufo' },
         { nombre: 'letrero', posicion: 150, posicionBottom: 20, modoOso: 'cubo' },
         { nombre: 'letrero', posicion: 200, modoOso: 'surf' },
+        { nombre: 'espejo', posicion: 250 },
         { nombre: 'bandera', posicion: 10000 }
     ];
     ultraOso = [
