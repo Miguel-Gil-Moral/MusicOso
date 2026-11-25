@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'version' => json_decode(file_get_contents(base_path('package.json')), true)['version'] ?? 'null',
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
