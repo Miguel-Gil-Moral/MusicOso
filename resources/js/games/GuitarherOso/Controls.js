@@ -76,6 +76,7 @@ const rhythmTypes = [
     }
 ];
 const activeNotes = new Set();
+const ghostImages = [];
 const noteMetrics = [];
 const noteTypes = Object.values(notesByKey);
 const gameMusic = document.getElementById('musica-joc');
@@ -89,6 +90,8 @@ let level = 50;
 let combo = 0;
 let konamiProgress = 0;
 let autoHitEnabled = false;
+let gameStarted = false;
+let comboShakeAnimation = null;
 let superPerfectComboTimeout = null;
 const missTimeouts = new Map();
 const autoHitTimeouts = new Map();
@@ -109,8 +112,6 @@ function startGameMusic() {
     });
 }
 
-startGameMusic();
-
 function updateLevel(change) {
     level = Math.max(0, Math.min(100, level + change));
     levelMarker.style.setProperty('--nivel', `${100 - level}%`);
@@ -123,6 +124,16 @@ function updateLevel(change) {
 
 function resetGame() {
     clearTimeout(nextNoteTimeout);
+    gameStarted = false;
+    autoHitEnabled = false;
+    konamiProgress = 0;
+    gameMusic.pause();
+    if (gameMusic.readyState > 0) {
+        gameMusic.currentTime = 0;
+    }
+
+    comboShakeAnimation?.cancel();
+    comboShakeAnimation = null;
     activeNotes.forEach((noteImage) => noteImage.remove());
     missTimeouts.forEach((timeout) => clearTimeout(timeout));
     missTimeouts.clear();
@@ -134,14 +145,8 @@ function resetGame() {
     level = 50;
     levelMarker.style.setProperty('--nivel', '50%');
     levelMarker.setAttribute('aria-valuenow', level);
-    gameMessage.textContent = '¡Has perdido! El juego se ha reiniciado.';
+    gameMessage.textContent = '¡Has perdido! Pulsa cualquier tecla para volver a jugar.';
     gameMessage.classList.add('mensaje-juego-visible');
-
-    setTimeout(() => {
-        gameMessage.classList.remove('mensaje-juego-visible');
-    }, 2500);
-
-    initializeNoteQueue();
 }
 
 function scheduleNextNote(rhythm) {
@@ -172,19 +177,62 @@ function shakeCombo() {
     const shakeDistance = 4 + (shakeIntensity * 0.1);
     const shakeRotation = 4 + (shakeIntensity * 0.1);
 
-    comboElement.style.setProperty('--combo-shake-distance', `${shakeDistance}px`);
-    comboElement.style.setProperty('--combo-shake-rotation', `${shakeRotation}deg`);
-    comboElement.classList.remove('combo-agitado');
-    void comboElement.offsetWidth;
-    comboElement.classList.add('combo-agitado');
+    comboShakeAnimation?.cancel();
+    const animation = comboElement.animate([
+        {
+            translate: '0px 0px',
+            rotate: '0deg',
+            scale: '1',
+            offset: 0
+        },
+        {
+            translate: `${-shakeDistance}px ${shakeDistance}px`,
+            rotate: `${-shakeRotation}deg`,
+            scale: '1.15',
+            offset: 0.2
+        },
+        {
+            translate: `${shakeDistance}px ${-shakeDistance}px`,
+            rotate: `${shakeRotation}deg`,
+            scale: '1.25',
+            offset: 0.4
+        },
+        {
+            translate: `${-shakeDistance}px 0px`,
+            rotate: `${-shakeRotation * 0.75}deg`,
+            scale: '1.1',
+            offset: 0.6
+        },
+        {
+            translate: `${shakeDistance}px ${shakeDistance}px`,
+            rotate: `${shakeRotation * 0.5}deg`,
+            scale: '1.15',
+            offset: 0.8
+        },
+        {
+            translate: '0px 0px',
+            rotate: '0deg',
+            scale: '1',
+            offset: 1
+        }
+    ], { duration: 500, easing: 'ease-in-out' });
+    comboShakeAnimation = animation;
+    animation.onfinish = () => {
+        if (comboShakeAnimation === animation) {
+            comboShakeAnimation = null;
+        }
+    };
 }
 
 function showPrecisionFeedback(text, type, noteImage) {
     const feedback = document.createElement('span');
+    const noteBounds = noteImage.getBoundingClientRect();
+    const pentagramBounds = pentagram.getBoundingClientRect();
+
     feedback.textContent = text;
     feedback.className = `feedback-precision feedback-${type}`;
-    feedback.style.left = `${noteImage.offsetLeft + (noteImage.offsetWidth / 2)}px`;
-    feedback.style.top = `${noteImage.offsetTop - 8}px`;
+    feedback.style.left = `${noteBounds.left - pentagramBounds.left + (noteBounds.width / 2)}px`;
+    feedback.style.top = `${noteBounds.top - pentagramBounds.top - 8}px`;
     pentagram.append(feedback);
 
     setTimeout(() => feedback.remove(), 900);
@@ -229,7 +277,6 @@ function registerNoteMetric(noteImage, timingFeedback) {
     };
 
     noteMetrics.push(metric);
-    console.log(`[GuitarherOso] Precisión de nota: ${metric.accuracyPercentage}%`, metric);
 }
 
 function showHackMessage() {
@@ -291,23 +338,48 @@ function createNoteData() {
 }
 
 function renderGhostNotes() {
-    pentagram.querySelectorAll('.nota-fantasma').forEach((noteImage) => noteImage.remove());
-
+    const visibleNotes = [...activeNotes].slice(0, ghostNoteCount);
     const rowCounts = new Map();
 
-    [...activeNotes].slice(0, ghostNoteCount).forEach((noteImage, index) => {
-        const ghostImage = document.createElement('img');
+    visibleNotes.forEach((noteImage, index) => {
+        let ghostImage = ghostImages[index];
+
+        if (!ghostImage) {
+            ghostImage = document.createElement('img');
+            ghostImage.alt = '';
+            ghostImages[index] = ghostImage;
+            pentagram.append(ghostImage);
+        }
+
         const row = noteImage.dataset.key;
         const rowIndex = rowCounts.get(row) || 0;
+        const ghostOpacity = `${-0.12 + ((ghostNoteCount - index) * 0.32)}`;
+        const ghostRowOffset = `${rowIndex * -42}px`;
 
         rowCounts.set(row, rowIndex + 1);
-        ghostImage.src = noteImage.dataset.blueImage;
-        ghostImage.alt = '';
-        ghostImage.className = `figura-musical nota-fantasma ${[...noteImage.classList]
-            .find((className) => className.startsWith('figura-') && className !== 'figura-musical')}`;
-        ghostImage.style.setProperty('--ghost-opacity', `${-0.12 + ((ghostNoteCount - index) * 0.28)}`);
-        ghostImage.style.setProperty('--ghost-row-offset', `${rowIndex * -42}px`);
-        pentagram.append(ghostImage);
+        const ghostClassName = `figura-musical nota-fantasma figura-${row}`;
+
+        if (ghostImage.className !== ghostClassName) {
+            ghostImage.className = ghostClassName;
+        }
+
+        if (ghostImage.getAttribute('src') !== noteImage.dataset.blueImage) {
+            ghostImage.src = noteImage.dataset.blueImage;
+        }
+
+        if (ghostImage.style.getPropertyValue('--ghost-opacity') !== ghostOpacity) {
+            ghostImage.style.setProperty('--ghost-opacity', ghostOpacity);
+        }
+
+        if (ghostImage.style.getPropertyValue('--ghost-row-offset') !== ghostRowOffset) {
+            ghostImage.style.setProperty('--ghost-row-offset', ghostRowOffset);
+        }
+
+        ghostImage.hidden = false;
+    });
+
+    ghostImages.slice(visibleNotes.length).forEach((ghostImage) => {
+        ghostImage.hidden = true;
     });
 }
 
@@ -335,6 +407,7 @@ function createNote() {
     noteImage.dataset.createdAt = createdAt;
     noteImage.dataset.hitTime = hitTime;
     noteImage.style.setProperty('--note-travel-duration', `${noteTravelDuration}ms`);
+    noteImage.style.setProperty('--note-travel-distance', `${endPosition - startPosition}px`);
     const missTimeout = setTimeout(() => {
         if (!activeNotes.has(noteImage)) {
             return;
@@ -355,8 +428,6 @@ function createNote() {
     scheduleAutoHit(noteImage);
     scheduleNextNote(rhythm);
 }
-
-initializeNoteQueue();
 
 function registerSuccessfulHit(noteImage, timingFeedback) {
     clearTimeout(missTimeouts.get(noteImage));
@@ -393,6 +464,21 @@ function registerSuccessfulHit(noteImage, timingFeedback) {
 
 document.addEventListener('keydown', (event) => {
     if (event.repeat) {
+        return;
+    }
+
+    if (!gameStarted) {
+        gameStarted = true;
+        gameMessage.textContent = '';
+        gameMessage.classList.remove('mensaje-juego-visible');
+
+        if (event.code === 'Space' || event.key.startsWith('Arrow')) {
+            event.preventDefault();
+        }
+
+        startGameMusic();
+        initializeNoteQueue();
+
         return;
     }
 
