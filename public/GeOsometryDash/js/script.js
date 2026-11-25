@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function crearEstructura() {
-        let posicionBottom = 5;
+        let posicionBottom = 5, posicionBottom2;
         let divTopBloque, divBottomBloque;
         let temp = [];
         contenedorJuego.appendChild(suelo);
@@ -163,13 +163,15 @@ document.addEventListener('DOMContentLoaded', function() {
             contenedorJuego.appendChild(imagen);
             temp.push(elemento);
             if(elemento?.bloquesEncima) {
+                posicionBottom2 = (elemento?.posicionBottom) ? elemento.posicionBottom : null;
                 for (let i = 0; i < elemento.bloquesEncima; i++) {
                     posicionBottom += 3.6;
+                    posicionBottom2 += 3.6;
                     const bloqueEncima = document.createElement('img');
                     bloqueEncima.classList.add('bloque');
                     bloqueEncima.src = '../GeOsometryDash/imagenes/Bloque.png';
                     bloqueEncima.style.left = elemento.posicion + 'rem';
-                    bloqueEncima.style.bottom = posicionBottom + 'rem';
+                    bloqueEncima.style.bottom = (elemento?.posicionBottom) ? posicionBottom2 + 'rem' : posicionBottom + 'rem';
                     contenedorJuego.appendChild(bloqueEncima);
                     temp.push({
                         nombre: bloqueEncima.classList[0],
@@ -320,6 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.currentTime = 0;
         audio.play();
         modoActual = 'Cubo';
+        estadoPersonaje = 'quieto';
         posicionFondo = 0.00, posicionSuelo = 0.00, posicionPersonaje = 5;
         limiteSalto = posicionPersonaje + 10, limiteCaidaLenta = limiteSalto - 1, limiteCaidaMedia = limiteSalto - 2;
         segundosActual = 0, minutosActual = 0;
@@ -331,6 +334,9 @@ document.addEventListener('DOMContentLoaded', function() {
         contenedorJuego.appendChild(personaje);
         contenedorJuego.appendChild(tiempo);
         contenedorJuego.appendChild(pantallaPausa);
+
+        personaje.src = '../GeOsometryDash/imagenes/Oso.png';
+        personaje.style.transform = 'scaleX(1) scaleY(1)';
 
         contenedorJuego.style.backgroundImage = 'url(../GeOsometryDash/imagenes/Fondo_juego.png)';
         contenedorJuego.style.backgroundSize = "";
@@ -349,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
+        clearInterval(tiempoSuma);
 
         ultimoFrame = 0;
     }
@@ -515,12 +522,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // NUEVO --> cambiar estado del personaje
     // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
     function surf() {
-        if (teclas[' ']) {
-            estadoPersonaje = 'surf_subida';
-            sumaSurf = 0.5;
-        } else {
+        estadoPersonaje = 'surf_subida';
+        sumaSurf = 0.1;
+
+        window.addEventListener('keyup', bajadaSurf);
+
+        window.addEventListener('blur', bajadaSurf);
+    }
+
+    function bajadaSurf() {
+        if (modoActual == 'Surf') {
             estadoPersonaje = 'surf_bajada';
-            sumaSurf = 0.5;
+            sumaSurf = 0.01
+        } else {
+            window.removeEventListener('keyup', bajadaSurf);
+            window.removeEventListener('blur', bajadaSurf);
         }
     }
 
@@ -528,7 +544,6 @@ document.addEventListener('DOMContentLoaded', function() {
         switch(event.key){
             case 'Escape':
                 if (!pause && pantallaActual === 'Juego') {
-                    this.clearInterval(tiempoSuma);
                     audio.pause();
                     pararIntervalos();
                     pantallaPausa.style.display = 'flex';
@@ -553,7 +568,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         realizarCaida();
                     }
                 } else {
-                    teclas[event.key] = true;
                     if (modoActual === 'Cubo') {
                         realizarSalto();
                     } else if (modoActual === 'Surf') {
@@ -573,16 +587,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     reiniciarJuego();
                 }
                 break;
-        }
-    })
-
-    window.addEventListener('keyup', function(event) {
-        teclas[event.key] = false;
-    })
-
-    window.addEventListener('blur', function() {
-        for (let evento in teclas) {
-            teclas[evento] = false;
         }
     })
 })

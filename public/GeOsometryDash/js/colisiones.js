@@ -86,8 +86,7 @@ function comprobarColisiones(personaje) {
     })
     bloquesTop.forEach(bloqueTop => {
         if (colision(personaje, bloqueTop) && !cambioGravedad){
-            // sueloPersonaje = parseFloat(personaje.style.bottom);
-            sueloPersonaje = parseFloat(bloqueTop.style.bottom) + 3.6;
+            sueloPersonaje = parseFloat(personaje.style.bottom);
             encimaBloque = true;
             prohibidoSaltar = false;
         } else if (colision(personaje, bloqueTop) && cambioGravedad) {
@@ -124,11 +123,12 @@ function comprobarColisiones(personaje) {
                     modoActual = 'Ufo';
                     break;
             }
+            cambiarImagenPersonaje(personaje);
         }
     })
     espejos.forEach(espejo => {
         if(colision(personaje, espejo) && !espejo.classList.contains('deshabilitar')){
-            espejoGravedad();
+            espejoGravedad(personaje);
             espejo.classList.add('deshabilitar');
             realizarCaida();
         }

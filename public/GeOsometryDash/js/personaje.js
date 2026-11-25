@@ -68,30 +68,23 @@ function actualizarPersonaje(deltaTime) {
         case 'surf_subida':
             if (!cambioGravedad) {
                 posicionPersonaje += sumaSurf * deltaTime * velocidad;
-                
-                sumaSurf += sumaSurf;
             } else {
                 posicionPersonaje -= sumaSurf * deltaTime * velocidad;
-                
-                sumaSurf += sumaSurf;
             }
+            sumaSurf += 0.01;
             break;
         case 'surf_bajada':
             if (!cambioGravedad) {
-                // if (sumaSurf < 1) {
-                //     sumaSurf = 1;
-                // }
                 posicionPersonaje -= sumaSurf * deltaTime * velocidad;
-                
-                sumaSurf += sumaSurf;
             } else {
-                // if (sumaSurf < 1) {
-                //     sumaSurf = 1;
-                // }
-
                 posicionPersonaje += sumaSurf * deltaTime * velocidad;
-                
-                sumaSurf += sumaSurf;
+            }
+            sumaSurf += 0.01;
+            if (posicionPersonaje <= sueloPersonaje && !cambioGravedad) {
+                posicionPersonaje = sueloPersonaje;
+                estadoPersonaje = 'quieto';
+                enAire = false;
+                prohibidoSaltar = false;
             }
             break;
     }
@@ -143,10 +136,34 @@ function personajeCaido() {
     enAire = false;
 }
 
-function espejoGravedad() {
+function espejoGravedad(personaje) {
     if(cambioGravedad) {
         cambioGravedad = false;
+        // personaje.style.transform = 'scaleY(1)';
     } else {
         cambioGravedad = true;
+        // personaje.style.transform = 'scaleY(-1)';
+    }
+}
+
+function cambiarImagenPersonaje(personaje) {
+    switch(modoActual) {
+        case 'Cubo':
+            personaje.src = '../GeOsometryDash/imagenes/Oso.png';
+            break;
+        case 'Surf':
+            personaje.src = '../GeOsometryDash/imagenes/Oso_surf.png';
+            break;
+        case 'Bola':
+            personaje.src = '../GeOsometryDash/imagenes/Oso_bola.png';
+            break;
+        case 'Ufo':
+            personaje.src = '../GeOsometryDash/imagenes/Oso_ufo.png';
+            break;
+    }
+    if (modoActual == 'Cubo') {
+        personaje.style.transform = 'scaleX(1)';
+    } else {
+        personaje.style.transform = 'scaleX(-1)';
     }
 }
