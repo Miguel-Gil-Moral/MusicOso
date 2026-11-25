@@ -1,6 +1,5 @@
 import { perderVida } from "./vidas.js";
 import { actualizarEnemigo } from "./enemigos.js";
-import { estado } from "./estado.js";
 import { createMap, enemigosNivel, matriz } from "./mapa.js";
 import barraImg from "../../../assets/osoDancer/barra.svg";
 
@@ -26,8 +25,6 @@ function gameTick() {
         if (tick % enemigo.velocidad === 0) {
             actualizarEnemigo(
                 enemigo,
-                estado.playerX,
-                estado.playerY,
                 matriz,
                 enemigosNivel
             );

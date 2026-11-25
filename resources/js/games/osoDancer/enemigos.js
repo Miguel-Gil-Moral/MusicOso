@@ -31,73 +31,53 @@ export function crearEnemigo(tipo, x, y) {
     return null;
 }
 
-export function actualizarEnemigo(enemigo, jugadorX, jugadorY, mapa, enemigosNivel) {
-    const distancia =
-        Math.abs(enemigo.x - jugadorX) +
-        Math.abs(enemigo.y - jugadorY);
+export function actualizarEnemigo(enemigo, mapa, enemigosNivel) {
+    patrullar(enemigo, mapa, enemigosNivel);
+}
 
-    if (distancia <= 5) {
-        moverEnemigo(enemigo, jugadorX, jugadorY, mapa, enemigosNivel);
-    } else {
-        patrullar(enemigo, mapa, enemigosNivel);
+export function patrullar(enemigo, mapa, enemigosNivel) {
+    const direcciones = [0, 1, 2, 3];
+
+    // Prueba cada dirección como máximo una vez.
+    while (direcciones.length > 0) {
+        const indice = Math.floor(Math.random() * direcciones.length);
+        const direccion = direcciones[indice];
+        direcciones.splice(indice, 1);
+
+        let nuevaX = enemigo.x;
+        let nuevaY = enemigo.y;
+
+        if (direccion === 0) nuevaX += 1;
+        else if (direccion === 1) nuevaX -= 1;
+        else if (direccion === 2) nuevaY += 1;
+        else if (direccion === 3) nuevaY -= 1;
+
+        if (puedeMover(enemigo, nuevaX, nuevaY, mapa, enemigosNivel)) {
+            enemigo.x = nuevaX;
+            enemigo.y = nuevaY;
+            return; // Ya se ha movido: termina este turno.
+        }
     }
 }
 
-export function moverEnemigo(enemigo, x, y, mapa, enemigosNivel) {
-
-    let distanciaX = Math.abs(enemigo.x - x);
-    let distanciaY = Math.abs(enemigo.y - y);
-
-    let nuevaX = enemigo.x;
-    let nuevaY = enemigo.y;
-
-    if (distanciaX > distanciaY) {
-        if (enemigo.x < x) {
-            nuevaX += 1;
-        } else if (enemigo.x > x) {
-            nuevaX -= 1;
-        }
-    } else {
-        if (enemigo.y < y) {
-            nuevaY += 1;
-        } else if (enemigo.y > y) {
-            nuevaY -= 1;
-        }
+function puedeMover(enemigo, nuevaX, nuevaY, mapa, enemigosNivel) {
+    // Primero comprueba que la fila y la casilla existen.
+    const fila = mapa[nuevaY];
+    if (fila === undefined) {
+        return false;
     }
 
-    if (puedeMover(enemigo, nuevaX, nuevaY, mapa, enemigosNivel)) {
-        enemigo.x = nuevaX;
-        enemigo.y = nuevaY;
+    const casilla = fila[nuevaX];
+    if (casilla === undefined || casilla === 1) {
+        return false;
     }
-}
 
-function puedeMover(enemigo, x, y, mapa, enemigosNivel) {
-
-    if (mapa[y]?.[x] === undefined) return false;
-    if (mapa[y][x] === 1) return false;
-
+    // Después comprueba que ningún otro enemigo ocupa la casilla.
     for (const otro of enemigosNivel) {
-        if (otro !== enemigo && otro.x === x && otro.y === y) {
+        if (otro !== enemigo && otro.x === nuevaX && otro.y === nuevaY) {
             return false;
         }
     }
 
     return true;
-}
-
-export function patrullar(enemigo, mapa, enemigosNivel) {
-    const random = Math.floor(Math.random() * 4);
-
-    let nuevaX = enemigo.x;
-    let nuevaY = enemigo.y;
-
-    if (random == 0) nuevaX += 1;
-    else if (random == 1) nuevaX -= 1;
-    else if (random == 2) nuevaY += 1;
-    else if (random == 3) nuevaY -= 1;
-
-    if (puedeMover(enemigo, nuevaX, nuevaY, mapa, enemigosNivel)) {
-        enemigo.x = nuevaX;
-        enemigo.y = nuevaY;
-    }
 }
