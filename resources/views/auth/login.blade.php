@@ -11,10 +11,14 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}"></link>
+    @vite('resources/css/login.css')
 </head>
 <body>
+    <header class="login-cartel">
+        <h1>MusicOso</h1>
+    </header>
 
     <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs {{ $errors->registro->any() ? 'hidden' : '' }}">
         <form action="{{ route('login.submit') }}" method="post" data-submitting-text="Iniciando sesión...">

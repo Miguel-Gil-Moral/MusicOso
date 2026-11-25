@@ -1,0 +1,41 @@
+body {
+    background-image: url('../assets/fondoLogin.svg');
+    background-position: center;
+    min-height: 100vh;
+    height: auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.login-cartel {
+    display: grid;
+    place-items: center;
+    width: min(96vw, 900px);
+    aspect-ratio: 3 / 1;
+    position: relative;
+    isolation: isolate;
+    flex-shrink: 0;
+    margin-top: -3.5rem;
+}
+
+.login-cartel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 33.333%;
+    width: 33.333%;
+    background: url('../assets/cartel.svg') center / 100% 100% no-repeat;
+    transform: scaleX(3);
+    z-index: -1;
+}
+
+.login-cartel h1 {
+    margin: 0;
+    color: #2b1404;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    text-align: center;
+}

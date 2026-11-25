@@ -2,7 +2,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(../imagenes/bosque.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     height: 100vh;
