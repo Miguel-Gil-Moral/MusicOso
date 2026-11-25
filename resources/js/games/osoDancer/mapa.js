@@ -1,5 +1,6 @@
 import { estado } from "./estado.js";
 import { crearEnemigo } from "./enemigos.js";
+import corazonImg from '../../../assets/osoDancer/corazonEntero.png';
 
 export const matriz = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -58,6 +59,16 @@ export function createMap() {
                         imagen.alt = enemigo.nombre;
                         imagen.classList.add("enemy");
                         cell.appendChild(imagen);
+                        const corazones = document.createElement('span');
+                        corazones.classList.add('enemy-health');
+                        for (let vida = 0; vida < enemigo.vida; vida++) {
+                            const corazon = document.createElement('img');
+                            corazon.src = corazonImg;
+                            corazon.alt = '';
+                            corazones.appendChild(corazon);
+                        }
+                        corazones.setAttribute('aria-label', `${enemigo.vida} puntos de vida`);
+                        cell.appendChild(corazones);
                     }
                 }
             map.appendChild(cell);

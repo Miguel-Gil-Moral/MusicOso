@@ -2,6 +2,8 @@ import corchea from '../../../assets/corchea.png';
 import negra from '../../../assets/negra.png';
 import blanca from '../../../assets/blanca.png';
 import redonda from '../../../assets/redonda.png';
+import { estado } from './estado.js';
+import { perderVida } from './vidas.js';
 
 export const enemigos = [
     { nombre: "corchea", velocidad: 1, vida: 1, daño: 1, asset: corchea },
@@ -53,6 +55,12 @@ export function patrullar(enemigo, mapa, enemigosNivel) {
         else if (direccion === 3) nuevaY -= 1;
 
         if (puedeMover(enemigo, nuevaX, nuevaY, mapa, enemigosNivel)) {
+            // Atacar consume el turno: el enemigo conserva su posición.
+            if (nuevaX === estado.playerX && nuevaY === estado.playerY) {
+                perderVida(enemigo.daño);
+                return;
+            }
+
             enemigo.x = nuevaX;
             enemigo.y = nuevaY;
             return; // Ya se ha movido: termina este turno.

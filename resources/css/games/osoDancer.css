@@ -167,6 +167,28 @@ body {
     pointer-events: none;
 }
 
+.enemy-health {
+    display: flex;
+    gap: 1px;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ef4444;
+    font-size: clamp(8px, 1.2vw, 16px);
+    line-height: 1;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px #000;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.enemy-health img {
+    width: clamp(8px, 1.2vw, 16px);
+    height: clamp(8px, 1.2vw, 16px);
+    object-fit: contain;
+}
+
 .exit {
     background-color: green;
 }
