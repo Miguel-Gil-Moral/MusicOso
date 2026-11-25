@@ -8,6 +8,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/css/login.css',
                 'resources/css/welcome.css',
                 'resources/js/app.js',
                 'resources/css/components/confirm-leave-level.css',

@@ -2,7 +2,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(../imagenes/bosque.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     height: 100vh;
@@ -35,6 +34,11 @@ input {
     margin-top: 2rem;
     background-color: #176b5b;
     border-radius: 8px
+}
+
+.botonLogin:disabled {
+    opacity: 0.65;
+    cursor: wait;
 }
 #botones-comoJugar {
     display: flex;
