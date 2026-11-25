@@ -17,7 +17,7 @@
 <body>
 
     <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs">
-        <form action="{{ route('login.submit') }}" method="post">
+        <form action="{{ route('login.submit') }}" method="post" data-submitting-text="Iniciando sesión...">
             @csrf
             <h1 class="text-xl font-semibold text-heading mb-6">Inicia sesión</h1>
             @include('auth.errors')
@@ -36,7 +36,7 @@
     </div>
 
     <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs hidden">
-        <form action="{{ route('usuari.store') }}" method="POST">
+        <form action="{{ route('usuari.store') }}" method="POST" data-submitting-text="Creando cuenta...">
             @csrf
 
             <h1 class="text-xl font-semibold text-heading mb-6">Crear cuenta</h1>
@@ -52,7 +52,7 @@
                 <label for="contrasenya_confirmation" class="block mb-2.5 text-sm font-medium text-heading">Repite la contraseña</label>
                 <input id="contrasenya_confirmation" type="password" name="contrasenya_confirmation" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" required />
             </div>
-            <button type="submit" class="botonLogin text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none w-full mb-3">Iniciar Sesión</button>
+            <button type="submit" class="botonLogin text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none w-full mb-3">Crear cuenta</button>
             <div class="preguntaLogin text-sm font-medium text-body">Ya tienes cuenta? <a href="#" class="cambiarPanel text-fg-brand hover:underline">Iniciar sesión</a></div>
         </form>
     </div>
