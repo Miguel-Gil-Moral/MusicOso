@@ -104,7 +104,7 @@ a {
     color: white;
 }
 
-.bloque, .zarzas, .espejo, .caja, .baya, .trampolin, .bandera, .bloqueTop, .bloqueBottom, .letrero {
+.bloque, .zarzas, .espejo, .caja, .baya, .trampolin, .bandera, .bloqueTop, .bloqueBottom, .letrero, .estrella {
     position: absolute;
 }
 
@@ -134,18 +134,16 @@ a {
     bottom: 3.5rem;
 }
 
-.caja {
-    height: 10vh;
-    width: 5vw;
+.estrella {
+    height: 7vh;
+    width: 6vw;
     left: 250rem;
-    bottom: 7rem;
 }
 
 .baya {
     height: 7vh;
     width: 3.5vw;
     left: 200rem;
-    bottom: 10rem;
 }
 
 .letrero {

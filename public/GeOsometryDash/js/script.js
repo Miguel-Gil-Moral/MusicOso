@@ -25,8 +25,6 @@
     let tiempoMuerte = null;
     let muriendo = false;
 
-    const teclas = {};
-
     /** FIN NUEVO */
 
     let posicionFondo = 0, posicionSuelo = 0, sueloPersonaje = 5, posicionPersonaje = 5, sumaSurf;
@@ -154,12 +152,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     imagen.src = '../GeOsometryDash/imagenes/Trampolin.png';
                     posicionBottom = 3.5;
                     break;
+                case 'estrella':
+                    imagen.src = '../GeOsometryDash/imagenes/Estrella.png';
+                    break;
                 case 'bandera':
                     imagen.src = '../GeOsometryDash/imagenes/Bandera.png';
                     break;
             }
             imagen.style.left = elemento.posicion + 'rem';
-            imagen.style.bottom = elemento?.posicionBottom ? elemento.posicionBottom + 'rem': posicionBottom + 'rem';
+            imagen.style.bottom = (elemento?.posicionBottom) ? elemento.posicionBottom + 'rem': posicionBottom + 'rem';
             contenedorJuego.appendChild(imagen);
             temp.push(elemento);
             if(elemento?.bloquesEncima) {
@@ -181,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (elemento.nombre === 'bloque') {
                 divTopBloque.style.left = elemento.posicion + 'rem';
-                divTopBloque.style.bottom = elemento?.posicionBottom ? elemento.posicionBottom + 3.6 + 'rem' : posicionBottom + 3.6 + 'rem';
+                divTopBloque.style.bottom = (elemento?.posicionBottom) ? elemento.posicionBottom + 3.6 + 'rem' : posicionBottom + 3.6 + 'rem';
                 contenedorJuego.appendChild(divTopBloque);
                 temp.push({ 
                     nombre: divTopBloque.classList[0],
@@ -196,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     temp.push({
                         nombre: divBottomBloque.classList[0],
                         posicion: elemento.posicion
-                    })
+                    });
                 }
             }
             if(elemento?.elementoEncima){
@@ -249,6 +250,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 elementoNuevo.style.bottom = elemento.posicionBottom - 3.6 + 'rem';
                 elementoNuevo.style.rotate = '180deg';
                 contenedorJuego.appendChild(elementoNuevo);
+                temp.push({
+                    nombre: elementoNuevo.classList[0],
+                    posicion: elemento.elementoDebajo.posicion
+                })
             }
         })
         estructuraNivel = temp;
@@ -263,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const espejos = document.querySelectorAll('.espejo');
         const bayas = document.querySelectorAll('.baya');
         const trampolines = document.querySelectorAll('.trampolin');
+        const estrellas = document.querySelectorAll('.estrella');
         const bandera = document.querySelector('.bandera');
         contenedorJuego.removeChild(suelo);
         contenedorJuego.removeChild(personaje);
@@ -290,6 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         trampolines.forEach(trampolin => {
             contenedorJuego.removeChild(trampolin);
+        })
+        estrellas.forEach(estrella => {
+            contenedorJuego.removeChild(estrella);
         })
         contenedorJuego.removeChild(bandera);
     }
@@ -434,8 +443,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function actualizarObstaculos(deltaTime) {
 
-        //Zarzas, bloques, bloquesTop, bloquesBottom, espejo, letrero, baya, trampolin
-        let iteraciones = [0, 0, 0, 0, 0, 0, 0, 0];
+        //Zarzas, bloques, bloquesTop, bloquesBottom, espejo, letrero, baya, trampolin, estrella
+        let iteraciones = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         const bloques = document.querySelectorAll('.bloque');
         const topBloques = document.querySelectorAll('.bloqueTop');
@@ -445,6 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const espejos = document.querySelectorAll('.espejo');
         const bayas = document.querySelectorAll('.baya');
         const trampolines = document.querySelectorAll('.trampolin');
+        const estrellas = document.querySelectorAll('.estrella');
         const bandera = document.querySelector('.bandera');
 
         for (let i = 0; i < estructuraNivel.length; i++) {
@@ -492,6 +502,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         trampolines[iteraciones[7]].style.left = estructuraNivel[i].posicion + 'rem';
                         
                         iteraciones[7]++;
+                        break;
+                    case 'estrella':
+                        estrellas[iteraciones[8]].style.left = estructuraNivel[i].posicion + 'rem';
+
+                        iteraciones[8]++;
                         break;
                     case 'bandera':
                         bandera.style.left = estructuraNivel[i].posicion + 'rem';

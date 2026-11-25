@@ -86,7 +86,8 @@ function comprobarColisiones(personaje) {
     })
     bloquesTop.forEach(bloqueTop => {
         if (colision(personaje, bloqueTop) && !cambioGravedad){
-            sueloPersonaje = parseFloat(personaje.style.bottom);
+            sueloPersonaje = parseFloat(bloqueTop.style.bottom);
+            estadoPersonaje = 'quieto';
             encimaBloque = true;
             prohibidoSaltar = false;
         } else if (colision(personaje, bloqueTop) && cambioGravedad) {
@@ -102,9 +103,19 @@ function comprobarColisiones(personaje) {
     })
     bloquesBottom.forEach(bloqueBottom => {
         if(colision(personaje, bloqueBottom) && cambioGravedad){
-            sueloPersonaje = parseFloat(personaje.style.bottom);
+            sueloPersonaje = parseFloat(bloqueBottom.style.bottom);
+            estadoPersonaje = 'quieto';
+            encimaBloque = true;
+            prohibidoSaltar = false;
         } else if (colision(personaje, bloqueBottom) && !cambioGravedad) {
             personajeCaido();
+        } else if (!colision(personaje, bloqueBottom) && cambioGravedad &&
+        sueloPersonaje != 100 && !encimaBloque) {
+            sueloPersonaje = 100;
+            limiteCaidaLenta = parseFloat(personaje.style.bottom) + 1;
+            limiteCaidaMedia = limiteCaidaLenta + 1;
+            prohibidoSaltar = true;
+            realizarCaida();
         }
     })
     letreros.forEach(letrero => {

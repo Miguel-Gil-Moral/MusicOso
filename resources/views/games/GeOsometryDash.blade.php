@@ -49,9 +49,6 @@
 <script src="{{ asset('GeOsometryDash/js/niveles.js') }}"></script>
 <script src="{{ asset('GeOsometryDash/js/personaje.js') }}"></script>
 <script src='{{ asset('GeOsometryDash/js/colisiones.js') }}'></script>
-{{-- <script src="{{ asset('GeOsometryDash/js/niveles/stereoso_madness.js') }}"></script>
-<script src="{{ asset('GeOsometryDash/js/niveles/oso_cant_let_go.js') }}"></script>
-<script src="{{ asset('GeOsometryDash/js/niveles/ultraoso.js') }}"></script> --}}
 
 @endsection
 {{-- 

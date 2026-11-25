@@ -19,16 +19,16 @@ function actualizarPersonaje(deltaTime) {
                     realizarCaida();
                 }
             } else {
-                if (posicionPersonaje >= limiteCaidaLenta &&
-                    posicionPersonaje < limiteSalto) {
+                if (posicionPersonaje <= limiteCaidaLenta &&
+                    posicionPersonaje > limiteSalto) {
                     posicionPersonaje -= 0.07 * deltaTime * velocidad;
-                } else if (posicionPersonaje >= limiteCaidaMedia &&
-                    posicionPersonaje < limiteCaidaLenta) {
+                } else if (posicionPersonaje <= limiteCaidaMedia &&
+                    posicionPersonaje > limiteCaidaLenta) {
                     posicionPersonaje -= 0.17 * deltaTime * velocidad;
                 } else {
                     posicionPersonaje -= 0.27 * deltaTime * velocidad;
                 }
-                if (posicionPersonaje >= limiteSalto) {
+                if (posicionPersonaje <= limiteSalto) {
                     posicionPersonaje = limiteSalto;
                     realizarCaida();
                 }
@@ -105,7 +105,7 @@ function realizarSalto() {
             limiteSalto = posicionPersonaje - 10;
             limiteCaidaLenta = limiteSalto + 1;
             limiteCaidaMedia = limiteSalto + 2;
-            // sueloPersonaje = 50;
+            sueloPersonaje = 100;
         }
         
         prohibidoSaltar = true;
