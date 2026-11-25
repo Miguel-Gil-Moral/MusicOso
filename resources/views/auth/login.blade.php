@@ -16,7 +16,7 @@
 </head>
 <body>
 
-    <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs">
+    <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs {{ $errors->registro->any() ? 'hidden' : '' }}">
         <form action="{{ route('login.submit') }}" method="post" data-submitting-text="Iniciando sesión...">
             @csrf
             <h1 class="text-xl font-semibold text-heading mb-6">Inicia sesión</h1>
@@ -35,11 +35,18 @@
         </form>
     </div>
 
-    <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs hidden">
+    <div class="panelLogin w-full max-w-sm bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs {{ $errors->registro->any() ? '' : 'hidden' }}">
         <form action="{{ route('usuari.store') }}" method="POST" data-submitting-text="Creando cuenta...">
             @csrf
 
             <h1 class="text-xl font-semibold text-heading mb-6">Crear cuenta</h1>
+            @if ($errors->registro->any())
+                <div class="error" role="alert">
+                    @foreach ($errors->registro->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
             <div class="mb-4">
                 <label for="nom-registre" class="block mb-2.5 text-sm font-medium text-heading">Nombre</label>
                 <input id="nom-registre" type="text" name="nom" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" value="{{ old('nom') }}" required>

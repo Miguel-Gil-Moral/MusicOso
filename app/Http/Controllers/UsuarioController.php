@@ -32,10 +32,10 @@ class UsuarioController extends Controller
      */
     public function store(Request $request, SesioService $sesioService)
     {
-        $dades = $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
+        $dades = $request->validateWithBag('registro', [
+            'nom' => ['required', 'string', 'max:255', 'unique:usuaris,nom'],
             'contrasenya' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ], ['nom.unique' => 'Este nombre de usuario ya está en uso.']);
 
         $rolUsuari = Rol::firstOrCreate(['nom' => 'Usuari']);
 
