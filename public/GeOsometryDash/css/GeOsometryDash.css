@@ -91,7 +91,15 @@ a {
     margin-top: 10rem;
 }
 
-.bloque, .zarzas, .espejo, .caja, .baya, .trampolin, .bandera, .bloqueTop, .bloqueBottom {
+#tiempoJuego {
+    position: absolute;
+    padding: 5px;
+    background-color: black;
+    color: white;
+    top: 1rem;
+}
+
+.bloque, .zarzas, .espejo, .caja, .baya, .trampolin, .bandera, .bloqueTop, .bloqueBottom, .letrero {
     position: absolute;
 }
 
@@ -102,7 +110,7 @@ a {
 }
 
 .bloqueTop, .bloqueBottom {
-    margin-left: 5px;
+    margin-left: 4.5px;
     bottom: 8.5rem;
     width: 3.4vw;
     height: 1vh;
@@ -133,6 +141,11 @@ a {
     width: 3.5vw;
     left: 200rem;
     bottom: 10rem;
+}
+
+.letrero {
+    height: 10vh;
+    width: 5vw;
 }
 
 .bandera {

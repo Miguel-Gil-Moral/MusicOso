@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('nivells', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('jocs_id');
+            $table->integer('numero_nivell');
+            $table->string('nom_joc');
+
+            $table->primary(['numero_nivell', 'nom_joc']);
         });
     }
 

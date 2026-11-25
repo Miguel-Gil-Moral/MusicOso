@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jocs', function (Blueprint $table) {
+        Schema::create('usuaris', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->string('contrasenya');
+            $table->integer('nivells_superats')->default(0);
+            $table->foreignId('rol')->default(6)->constrained('rols');
         });
     }
 
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jocs');
+        Schema::dropIfExists('usuaris');
     }
 };

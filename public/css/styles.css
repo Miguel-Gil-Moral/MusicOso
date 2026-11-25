@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.preguntaLogin {
+    font-weight: bold;
+}
+
+a {
+    font-weight: normal;
+}
+
+.error {
+    color: #a33832;
+    font-weight: bold;
+}
+
+.panelLogin {
+    border-radius: 12px;
+    background-color: white;
+}
+
+input {
+    border-radius: 8px;
+}
+
+.botonLogin {
+    margin-top: 2rem;
+    background-color: #176b5b;
+    border-radius: 8px
+}
+
+.botonLogin:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+#botones-comoJugar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

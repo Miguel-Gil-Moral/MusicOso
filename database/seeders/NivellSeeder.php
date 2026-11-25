@@ -7,25 +7,21 @@ use Illuminate\Support\Facades\DB;
 
 class NivellSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $games = DB::table('jocs')->pluck('id', 'nom');
+        DB::table('nivells')->insert([
+            ['numero_nivell' => 1, 'nom_joc' => 'MusicOso'],
+            ['numero_nivell' => 2, 'nom_joc' => 'MusicOso'],
+            ['numero_nivell' => 3, 'nom_joc' => 'MusicOso'],
 
-        foreach ($games as $gameName => $gameId) {
-            for ($level = 1; $level <= 3; $level++) {
-                DB::table('nivells')->updateOrInsert(
-                    [
-                        'jocs_id' => $gameId,
-                        'id' => ($gameId - 1) * 3 + $level,
-                    ],
-                    [
-                        'jocs_id' => $gameId,
-                    ],
-                );
-            }
-        }
+            ['numero_nivell' => 1, 'nom_joc' => 'GeOsometryDash'],
+            ['numero_nivell' => 2, 'nom_joc' => 'GeOsometryDash'],
+            ['numero_nivell' => 3, 'nom_joc' => 'GeOsometryDash'],
+            
+            ['numero_nivell' => 1, 'nom_joc' => 'GitarherOso'],
+            ['numero_nivell' => 2, 'nom_joc' => 'GitarherOso'],
+            ['numero_nivell' => 3, 'nom_joc' => 'GitarherOso'],
+
+        ]);
     }
 }
