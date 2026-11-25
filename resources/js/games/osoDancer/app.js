@@ -41,6 +41,7 @@ document.addEventListener("keydown", (event) => {
 
     if (indiceEnemigo !== -1) {
         const enemigo = enemigosNivel[indiceEnemigo];
+        estado.ataque = { x: newX - estado.playerX, y: newY - estado.playerY };
         enemigo.vida -= 1;
 
         if (enemigo.vida <= 0) {

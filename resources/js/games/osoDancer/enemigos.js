@@ -57,6 +57,7 @@ export function patrullar(enemigo, mapa, enemigosNivel) {
         if (puedeMover(enemigo, nuevaX, nuevaY, mapa, enemigosNivel)) {
             // Atacar consume el turno: el enemigo conserva su posición.
             if (nuevaX === estado.playerX && nuevaY === estado.playerY) {
+                enemigo.ataque = { x: nuevaX - enemigo.x, y: nuevaY - enemigo.y };
                 perderVida(enemigo.daño);
                 return;
             }
