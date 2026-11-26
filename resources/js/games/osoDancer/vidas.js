@@ -48,8 +48,8 @@ function actualizarCorazones() {
     });
 }
 
-export function perderVida() {
-    estado.vidas--;
+export function perderVida(cantidad = 1) {
+    estado.vidas -= cantidad;
     if (estado.vidas <= 0) {
         estado.vidas = 3;
         estado.playerX = 2;

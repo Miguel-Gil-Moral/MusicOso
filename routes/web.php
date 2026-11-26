@@ -19,3 +19,5 @@ Route::view('/games/GuitarherOso', 'games.GuitarherOso')->name('games.GuitarherO
 Route::view('/games/GeOsometryDash', 'games.GeOsometryDash')->name('games.GeOsometryDash');
 
 Route::resource('usuari', UsuarioController::class);
+
+Route::resource('metricas', MetricaController::class);
