@@ -1,4 +1,5 @@
     let estructuraNivel = [], audio;
+    let elementosPillados = {};
 
     /** NUEVO **/
 
@@ -260,47 +261,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function quitarElementos() {
-        const zarzas = document.querySelectorAll('.zarzas');
-        const bloques = document.querySelectorAll('.bloque');
-        const topBloques = document.querySelectorAll('.bloqueTop');
-        const bottomBloques = document.querySelectorAll('.bloqueBottom');
-        const letreros = document.querySelectorAll('.letrero');
-        const espejos = document.querySelectorAll('.espejo');
-        const bayas = document.querySelectorAll('.baya');
-        const trampolines = document.querySelectorAll('.trampolin');
-        const estrellas = document.querySelectorAll('.estrella');
-        const bandera = document.querySelector('.bandera');
         contenedorJuego.removeChild(suelo);
         contenedorJuego.removeChild(personaje);
         contenedorJuego.removeChild(tiempo);
-        zarzas.forEach(zarza => {
+        elementosPillados.zarzas.forEach(zarza => {
             contenedorJuego.removeChild(zarza);
         });
-        bloques.forEach(bloque => {
+        elementosPillados.bloques.forEach(bloque => {
             contenedorJuego.removeChild(bloque);
         });
-        topBloques.forEach(topBloque => {
+        elementosPillados.topBloques.forEach(topBloque => {
             contenedorJuego.removeChild(topBloque);
         });
-        bottomBloques.forEach(bottomBloque => {
+        elementosPillados.bottomBloques.forEach(bottomBloque => {
             contenedorJuego.removeChild(bottomBloque);
-        })
-        letreros.forEach(letrero => {
+        });
+        elementosPillados.letreros.forEach(letrero => {
             contenedorJuego.removeChild(letrero);
-        })
-        espejos.forEach(espejo => {
+        });
+        elementosPillados.espejos.forEach(espejo => {
             contenedorJuego.removeChild(espejo);
         });
-        bayas.forEach(baya => {
+        elementosPillados.bayas.forEach(baya => {
             contenedorJuego.removeChild(baya);
-        })
-        trampolines.forEach(trampolin => {
+        });
+        elementosPillados.trampolines.forEach(trampolin => {
             contenedorJuego.removeChild(trampolin);
-        })
-        estrellas.forEach(estrella => {
+        });
+        elementosPillados.estrellas.forEach(estrella => {
             contenedorJuego.removeChild(estrella);
-        })
-        contenedorJuego.removeChild(bandera);
+        });
+        contenedorJuego.removeChild(elementosPillados.bandera);
     }
 
     botonMenu.addEventListener('click', function() {
@@ -385,7 +376,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function arrancarJuego() {
         pantallaActual = 'Juego';
         actualizarTiempo();
-       
+
+        elementosPillados.bloques = document.querySelectorAll('.bloque');
+        elementosPillados.topBloques = document.querySelectorAll('.bloqueTop');
+        elementosPillados.bottomBloques = document.querySelectorAll('.bloqueBottom');
+        elementosPillados.zarzas = document.querySelectorAll('.zarzas');
+        elementosPillados.letreros = document.querySelectorAll('.letrero');
+        elementosPillados.espejos = document.querySelectorAll('.espejo');
+        elementosPillados.bayas = document.querySelectorAll('.baya');
+        elementosPillados.trampolines = document.querySelectorAll('.trampolin');
+        elementosPillados.estrellas = document.querySelectorAll('.estrella');
+        elementosPillados.bandera = document.querySelector('.bandera');
+
         /** VARIABLES NUEVAS */
 
         muriendo = false;
@@ -446,17 +448,6 @@ document.addEventListener('DOMContentLoaded', function() {
         //Zarzas, bloques, bloquesTop, bloquesBottom, espejo, letrero, baya, trampolin, estrella
         let iteraciones = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-        const bloques = document.querySelectorAll('.bloque');
-        const topBloques = document.querySelectorAll('.bloqueTop');
-        const bottomBloques = document.querySelectorAll('.bloqueBottom');
-        const zarzas = document.querySelectorAll('.zarzas');
-        const letreros = document.querySelectorAll('.letrero');
-        const espejos = document.querySelectorAll('.espejo');
-        const bayas = document.querySelectorAll('.baya');
-        const trampolines = document.querySelectorAll('.trampolin');
-        const estrellas = document.querySelectorAll('.estrella');
-        const bandera = document.querySelector('.bandera');
-
         for (let i = 0; i < estructuraNivel.length; i++) {
 
             estructuraNivel[i].posicion -= 0.2 * deltaTime * velocidad;
@@ -464,52 +455,52 @@ document.addEventListener('DOMContentLoaded', function() {
             // if (estructuraNivel[i].visible){
                 switch (estructuraNivel[i].nombre) {
                     case 'zarzas':
-                        zarzas[iteraciones[0]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.zarzas[iteraciones[0]].style.left = estructuraNivel[i].posicion + 'rem';
                         // eliminarElemento(i, zarzas[iteraciones[0]]);
                         iteraciones[0]++;
                         break;
                     case 'bloque':
-                        bloques[iteraciones[1]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.bloques[iteraciones[1]].style.left = estructuraNivel[i].posicion + 'rem';
                         // eliminarElemento(i, bloques[iteraciones[1]]);
                         iteraciones[1]++;
                         break;
                     case 'bloqueTop':
-                        topBloques[iteraciones[2]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.topBloques[iteraciones[2]].style.left = estructuraNivel[i].posicion + 'rem';
                         // eliminarElemento(i, topBloques[iteraciones[2]]);
                         iteraciones[2]++;
                         break;
                     case 'bloqueBottom':
-                        bottomBloques[iteraciones[3]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.bottomBloques[iteraciones[3]].style.left = estructuraNivel[i].posicion + 'rem';
 
                         iteraciones[3]++;
                         break;
                     case 'espejo':
-                        espejos[iteraciones[4]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.espejos[iteraciones[4]].style.left = estructuraNivel[i].posicion + 'rem';
 
                         iteraciones[4]++;
                         break;
                     case 'letrero':
-                        letreros[iteraciones[5]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.letreros[iteraciones[5]].style.left = estructuraNivel[i].posicion + 'rem';
                         
                         iteraciones[5]++;
                         break;
                     case 'baya':
-                        bayas[iteraciones[6]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.bayas[iteraciones[6]].style.left = estructuraNivel[i].posicion + 'rem';
 
                         iteraciones[6]++;
                         break;
                     case 'trampolin':
-                        trampolines[iteraciones[7]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.trampolines[iteraciones[7]].style.left = estructuraNivel[i].posicion + 'rem';
                         
                         iteraciones[7]++;
                         break;
                     case 'estrella':
-                        estrellas[iteraciones[8]].style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.estrellas[iteraciones[8]].style.left = estructuraNivel[i].posicion + 'rem';
 
                         iteraciones[8]++;
                         break;
                     case 'bandera':
-                        bandera.style.left = estructuraNivel[i].posicion + 'rem';
+                        elementosPillados.bandera.style.left = estructuraNivel[i].posicion + 'rem';
                         break;
                 }
 

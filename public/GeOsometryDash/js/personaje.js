@@ -113,7 +113,6 @@ function realizarSalto() {
         // NUEVO --> cambiar estado del personaje
         // Ahora la función "Actualizar personaje" es la que mueve arriba y abajo el pj
         estadoPersonaje = "saltando";
-        
     }
 
 }
