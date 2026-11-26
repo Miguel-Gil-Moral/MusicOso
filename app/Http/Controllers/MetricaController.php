@@ -2,61 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Metrica;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MetricaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Metrica::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $datos = $request->validate([
+            'id_sesio' => 'required|exists:sesions,id',
+            'nom_joc' => 'required|string',
+
+            'numero_nivell' => [
+                'required',
+                'integer',
+                Rule::exists('nivells', 'numero_nivell')
+                    ->where('nom_joc', $request->nom_joc)
+            ],
+
+            'precisio' => 'nullable|numeric|min:0|max:100',
+            'temps_partida' => 'nullable|integer|min:0',
+            'pasos' => 'nullable|integer|min:0',
+            'vidas' => 'nullable|integer|min:0',
+            'estrellas' => 'nullable|integer|min:0|max:3',
+            'combo' => 'nullable|integer|min:0',
+            'intents' => 'nullable|integer|min:0',
+            'data_hora_inici' => 'required|date'
+        ]);
+
+        $metrica = Metrica::create($datos);
+
+        return response()->json($metrica);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        return Metrica::findOrFail($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
