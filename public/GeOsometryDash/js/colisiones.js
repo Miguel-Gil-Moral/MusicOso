@@ -65,16 +65,6 @@ function colisionBaya(personaje, baya) {
 }
 
 function comprobarColisiones(personaje) {
-    // Zarzas
-    // const zarzas = document.querySelectorAll('.zarzas');
-    // const bloques = document.querySelectorAll('.bloque');
-    // const bloquesTop = document.querySelectorAll('.bloqueTop');
-    // const bloquesBottom = document.querySelectorAll('.bloqueBottom');
-    // const letreros = document.querySelectorAll('.letrero');
-    // const espejos = document.querySelectorAll('.espejo');
-    // const bayas = document.querySelectorAll('.baya');
-    // const trampolines = document.querySelectorAll('.trampolin');
-    // const bandera = document.querySelector('.bandera');
     encimaBloque = false;
     estaBaya = false;
 
